@@ -5,9 +5,9 @@ import com.rabbitmq.client.ConnectionFactory;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
 
-public class Sensor {
-
+public class HeartrateSensor {
 	public final static String CER_HUB_NORMAL = "CER_HUB_NORMAL";
+
 
 	public static void main(String argv[]) throws Exception {
 		ConnectionFactory factory = new ConnectionFactory();
@@ -20,12 +20,15 @@ public class Sensor {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		ObjectOutputStream oos = new ObjectOutputStream(bos);
 
-		Message msg = new Message();
+		HeartrateMessage msg = new HeartrateMessage();
+
+		msg.setHeartrate(120);
 		msg.setMessage("whoo");
 		oos.writeObject(msg);
 		oos.flush();
 		oos.close();
 
+		String message = "Hello World!";
 		channel.basicPublish("", CER_HUB_NORMAL, null, bos.toByteArray());
 		System.out.println(" [x] Sent");
 		bos.close();

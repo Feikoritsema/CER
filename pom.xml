@@ -8,11 +8,18 @@
 	<artifactId>CER</artifactId>
 	<packaging>pom</packaging>
 	<version>1.0-SNAPSHOT</version>
+
+	<properties>
+		<maven.compiler.source>9</maven.compiler.source>
+		<maven.compiler.target>9</maven.compiler.target>
+	</properties>
+
 	<modules>
 		<module>emergency</module>
 		<module>hub</module>
 		<module>sensor</module>
 		<module>neighbour</module>
+		<module>messages</module>
 	</modules>
 
 	<dependencies>
