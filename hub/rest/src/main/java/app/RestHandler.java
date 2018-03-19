@@ -18,29 +18,30 @@ public class RestHandler {
         // Verify user who sent request
 
         // Open lock if verification worked
-        System.out.println("POST method called");
+        System.out.println("Lock POST method called");
     }
 
     // Endpoint for marking the emergency as resolved
     @RequestMapping(value = "/emergency", method = RequestMethod.PUT)
     @ResponseBody
-    public void markResolved() {
+    public void updateEmergency() {
         // Verify user who sent request
 
         // Stop emergency (close em. socket etc.)
-        System.out.println("PUT method called");
+        System.out.println("Emergency PUT method called");
     }
 
     // Endpoint for changing the settings
     @RequestMapping(value = "/settings", method = RequestMethod.PUT)
     @ResponseBody
     public ResponseEntity<String> updateSettings() {
+        System.out.println("Settings PUT method called");
         if(true){
             // Update settings
-            return new ResponseEntity<String>("Settings updated", HttpStatus.OK);
+            return new ResponseEntity<>("Settings updated", HttpStatus.OK);
         }
 
-        return new ResponseEntity<String>("Something went wrong", HttpStatus.BAD_REQUEST)
+        return new ResponseEntity<>("Something went wrong", HttpStatus.BAD_REQUEST);
     }
 
 
@@ -48,8 +49,9 @@ public class RestHandler {
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<String> testMethod() {
+        System.out.println("Test GET method called");
         String test = "Rest GET request for CER worked";
-        return new ResponseEntity<String>(test, HttpStatus.OK);
+        return new ResponseEntity<>(test, HttpStatus.OK);
     }
 
 }
