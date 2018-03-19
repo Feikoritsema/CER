@@ -6,32 +6,30 @@ import com.rabbitmq.client.Envelope;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 
 public class MessageConsumer extends DefaultConsumer {
 
 	private Worker worker;
 
+	private JsonMessageFactory messageFactory;
+
 	public MessageConsumer(final Channel channel) {
 		super(channel);
 		worker = new Worker();
+		messageFactory = new JsonMessageFactory();
 	}
 
 	@Override
-	public void handleDelivery(final String consumerTag, final Envelope envelope, final AMQP.BasicProperties properties, final byte[] body) throws IOException {
+	public void handleDelivery(final String consumerTag, final Envelope envelope, final AMQP.BasicProperties properties, final byte[] body) {
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		os.write(body, 0, body.length);
 		ByteArrayInputStream is = new ByteArrayInputStream(os.toByteArray());
-
-		Message msg = null;
+		Message msg;
 		try {
-			ObjectInputStream objInputStream = new ObjectInputStream(is);
-			msg = (Message) objInputStream.readObject();
-		} catch (ClassNotFoundException e) {
-			System.out.println("class not found");
-
+			msg = messageFactory.inputStreamToMessage(is);
 		} catch (IOException e) {
-			System.out.println("IOException...");
+			e.printStackTrace();
+			return;
 		}
 
 		// TODO, fix instanceof..
