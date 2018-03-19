@@ -13,7 +13,7 @@ public class MessageConsumer extends DefaultConsumer {
 
 	private JsonMessageFactory messageFactory;
 
-	public MessageConsumer(final Channel channel) {
+	MessageConsumer(final Channel channel) {
 		super(channel);
 		worker = new Worker();
 		messageFactory = new JsonMessageFactory();

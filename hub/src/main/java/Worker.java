@@ -1,7 +1,7 @@
 public class Worker {
 
 	public void handleMessage(Message m) {
-		System.out.println("Default message");
+		System.out.println("Default message: " + m.getMessage());
 	}
 
 	public void handleMessage(HeartrateMessage m) {

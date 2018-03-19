@@ -1,31 +1,21 @@
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
+import java.util.Random;
 
 public class HeartrateSensor {
-	public final static String CER_HUB_NORMAL = "CER_HUB_NORMAL";
 
 	public static void main(String argv[]) throws Exception {
-		ConnectionFactory factory = new ConnectionFactory();
-		factory.setHost("localhost");
-
-		Connection connection = factory.newConnection();
-		Channel channel = connection.createChannel();
-		channel.queueDeclare(CER_HUB_NORMAL, false, false, false, null);
-
-		HeartrateMessage msg = new HeartrateMessage();
-		msg.setHeartrate(120);
-		msg.setMessage("whoo");
-
-		JsonMessageFactory messageFactory = new JsonMessageFactory();
-		String message = messageFactory.messageToJson(msg);
-
-		channel.basicPublish("", CER_HUB_NORMAL, null, message.getBytes());
-		System.out.println(" [x] Sent");
-
-		channel.close();
-		connection.close();
-		System.out.println("Ended connection");
+		MessageProducer producer = new MessageProducer("localhost");
+		Integer i = 0;
+		Random rng = new Random();
+		int heartrate = 70;
+		while (true) {
+			HeartrateMessage msg = new HeartrateMessage();
+			msg.setMessage("Heartrate msg " + i.toString());
+			int diff = rng.nextInt() % 20;
+			heartrate = (heartrate < 70 ? heartrate + diff : heartrate - diff);
+			msg.setHeartrate(heartrate);
+			producer.sendMessage(msg);
+			Thread.sleep(2000);
+		}
 	}
 
 }

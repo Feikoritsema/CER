@@ -16,10 +16,8 @@ abstract class Queue {
 			Connection connection = factory.newConnection();
 			channel = connection.createChannel();
 			channel.queueDeclare(queue, false, false, false, null);
-		} catch (TimeoutException e) {
-			System.out.println("Connection timed out");
-		} catch (IOException e) {
-			System.out.println("IOException");
+		} catch (TimeoutException | IOException e) {
+			e.printStackTrace();
 		}
 	}
 

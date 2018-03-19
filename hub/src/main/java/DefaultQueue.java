@@ -1,8 +1,8 @@
 import java.io.IOException;
 
-public class DefaultQueue extends Queue {
+class DefaultQueue extends Queue {
 
-	public final static String CER_HUB_NORMAL = "CER_HUB_NORMAL";
+	private final static String CER_HUB_NORMAL = "CER_HUB_NORMAL";
 
 	private MessageConsumer consumer;
 
@@ -12,7 +12,7 @@ public class DefaultQueue extends Queue {
 		try {
 			getChannel().basicConsume(CER_HUB_NORMAL, true, consumer);
 		} catch (IOException e) {
-			System.out.println("IOException");
+			e.printStackTrace();
 		}
 	}
 
