@@ -4,14 +4,14 @@ class DefaultQueue extends Queue {
 
 	DefaultQueue(final String host) {
 		super(host, CER_HUB_NORMAL);
-		MessageConsumer messageConsumer = new MessageConsumer(getChannel());
+		DefaultMessageConsumer messageConsumer = new DefaultMessageConsumer(getChannel());
 		setConsumer(messageConsumer);
 	}
 
 	@Override
 	public void run() {
 		while (true) {
-			notifyListeners(getConsumer().updateStatus());
+			notifyListeners(((DefaultMessageConsumer) getConsumer()).updateStatus());
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {

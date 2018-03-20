@@ -1,9 +1,7 @@
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Envelope;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.util.List;
 
 public class PriorityQueue extends Queue {
 
@@ -11,21 +9,12 @@ public class PriorityQueue extends Queue {
 
 	PriorityQueue(final String host) {
 		super(host, CER_HUB_PRIORITY);
-		JsonMessageFactory messageFactory = new JsonMessageFactory();
-		MessageConsumer messageConsumer = new MessageConsumer(getChannel()) {
+		AbstractMessageConsumer messageConsumer = new AbstractMessageConsumer(getChannel()) {
 			@Override
 			public void handleDelivery(final String consumerTag, final Envelope envelope, final AMQP.BasicProperties properties, final byte[] body) {
-				ByteArrayOutputStream os = new ByteArrayOutputStream();
-				os.write(body, 0, body.length);
-				ByteArrayInputStream is = new ByteArrayInputStream(os.toByteArray());
-				PanicMessage msg;
-				try {
-					msg = (PanicMessage) messageFactory.inputStreamToMessage(is);
-				} catch (IOException e) {
-					e.printStackTrace();
-					return;
-				}
-				notifyListeners(msg.getStatus());
+				super.handleDelivery(consumerTag, envelope, properties, body);
+				List<PanicMessage> messageList = getMessagesOf(PanicMessage.class);
+				notifyListeners(messageList.get(messageList.size() - 1).getStatus());
 			}
 		};
 		setConsumer(messageConsumer);

@@ -10,7 +10,7 @@ import java.util.concurrent.TimeoutException;
 abstract class Queue extends Thread {
 
 	private Channel channel;
-	private MessageConsumer consumer;
+	private AbstractMessageConsumer consumer;
 	private List<QueueListener> listeners;
 	private String queue;
 
@@ -28,11 +28,11 @@ abstract class Queue extends Thread {
 		}
 	}
 
-	public MessageConsumer getConsumer() {
+	public AbstractMessageConsumer getConsumer() {
 		return consumer;
 	}
 
-	public void setConsumer(final MessageConsumer consumer) {
+	public void setConsumer(final AbstractMessageConsumer consumer) {
 		this.consumer = consumer;
 		try {
 			channel.basicConsume(queue, true, consumer);

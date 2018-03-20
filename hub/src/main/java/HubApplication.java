@@ -9,16 +9,15 @@ public class HubApplication extends JFrame implements QueueListener {
 	public HubApplication() {
 		super("Hub");
 		setSize(200, 200);
-
-		// TODO: new priorityQueue
-		System.out.println("I am the hub.");
-
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		JFrame.setDefaultLookAndFeelDecorated(true);
 		setLocationRelativeTo(null);
+
 		label = new JLabel("status");
 		label.setText(status.name());
+		label.setFont(new Font("Serif", Font.PLAIN, 50));
 		label.setPreferredSize(new Dimension(200, 200));
+		label.setHorizontalAlignment(SwingConstants.CENTER);
 		getContentPane().add(label, BorderLayout.CENTER);
 
 		final Queue defaultQueue = new DefaultQueue("localhost");
@@ -31,10 +30,6 @@ public class HubApplication extends JFrame implements QueueListener {
 
 		pack();
 		setVisible(true);
-	}
-
-	public static void main(String args[]) {
-		new HubApplication();
 	}
 
 	public void setStatus(final Status s) {
@@ -57,5 +52,9 @@ public class HubApplication extends JFrame implements QueueListener {
 	public void onStatusChange(final Status s) {
 		setStatus(s);
 		System.out.println("Status: " + status.name());
+	}
+
+	public static void main(String args[]) {
+		new HubApplication();
 	}
 }
