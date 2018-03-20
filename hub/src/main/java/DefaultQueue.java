@@ -16,5 +16,4 @@ class DefaultQueue extends Queue {
 		}
 	}
 
-
 }

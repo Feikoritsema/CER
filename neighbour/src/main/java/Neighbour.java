@@ -10,7 +10,6 @@ import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-
 public class Neighbour {
     private static final String URL = "http://localhost:8080/api";
 
@@ -68,7 +67,7 @@ public class Neighbour {
 
     private static void sendStringPostRequest(String path, String message){
         RestTemplate restTemplate = new RestTemplate();
-        HttpEntity<String> request = new HttpEntity<String>(message);
+        HttpEntity<String> request = new HttpEntity<>(message);
         ResponseEntity<String> response = restTemplate.exchange(URL + path,
                 HttpMethod.POST, request, String.class);
         String string = response.getBody();
