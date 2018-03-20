@@ -2,23 +2,11 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Invocation;
-import javax.ws.rs.client.WebTarget;
-import javax.xml.ws.Response;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.lang.reflect.Type;
-import java.net.HttpURLConnection;
-import java.net.URI;
-import java.net.URL;
 
-import static com.sun.org.apache.xerces.internal.util.PropertyState.is;
 
 public class Neighbour {
     private static final String URL = "http://localhost:8080/api";
@@ -33,7 +21,7 @@ public class Neighbour {
         while(true){
             System.out.print("Enter command: ");
             command = console.readLine();
-            if(command.equals("openlock")){
+            if(command.equals("openLock")){
                 sendOpenLock();
             } else if(command.equals("configureSettings")){
                 sendConfigureSettings();
@@ -66,7 +54,17 @@ public class Neighbour {
         HttpEntity<SmartLock> request = new HttpEntity<SmartLock>(new SmartLock("Open"));
         ResponseEntity<SmartLock> response = restTemplate.exchange(URL + "/lock", HttpMethod.POST, request, SmartLock.class);
         SmartLock smartLock = response.getBody();
+        HttpStatus httpStatus = response.getStatusCode();
+        assert(httpStatus.equals(HttpStatus.OK));
         return smartLock;
+    }
+
+    private static void sendConfigureSettings(){
+
+    }
+
+    private static void sendUpdateEmergency(){
+
     }
 
 }
