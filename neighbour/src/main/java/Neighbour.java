@@ -16,7 +16,6 @@ public class Neighbour {
 
     public static void main(String args[]){
 
-
         System.out.println("I am the Neighbour.");
 
         // UI part
@@ -28,7 +27,9 @@ public class Neighbour {
         JPanel panel = new JPanel();
         frame.add(panel);
         JButton openLock = new JButton("Open neighbour lock");
+        openLock.setAlignmentY(120);
         panel.add(openLock);
+        openLock.setAlignmentY(120);
         openLock.addActionListener (new OpenLock());
 
         JButton sendOnWay = new JButton("Notify you're coming");
@@ -64,8 +65,6 @@ public class Neighbour {
         RestTemplate restTemplate = new RestTemplate();
         return restTemplate.getForEntity(URL + path, String.class);
     }
-
-    // TODO: Determine if only String post requests suffice in stead of JSON / serializable classes
 
     private static void sendStringPostRequest(String path, String message){
         RestTemplate restTemplate = new RestTemplate();

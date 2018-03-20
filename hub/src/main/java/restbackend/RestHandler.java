@@ -17,6 +17,7 @@ public class RestHandler {
 		if (user.equals("Feiko")||user.equals("EMERGENCYSERVICE")){
 			// Open Lock
 
+			
 			return new ResponseEntity<>("User: " + user + " unlocked the door.", HttpStatus.OK);
 		}
 		// Bad verification
