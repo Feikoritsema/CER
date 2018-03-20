@@ -7,9 +7,22 @@ import org.springframework.web.client.RestTemplate;
 public class EmergencyServices {
     private static final String URL = "http://localhost:8080/api";
 
+    private static Server server;
+
     public static void main(String args[]) {
         System.out.println("I am the EmergencyService.");
 
+        server = new Server(4242);
+
+        while (true) {
+            server.waitForConnection();
+
+            Message message;
+            while (!server.isClosed()) { // TODO: Find out when to stop!
+                message = server.receive();
+                System.out.print(message.getMessage());
+            }
+        }
     }
 
     private static void sendStringPostRequest(String path, String message){
