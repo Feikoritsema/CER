@@ -30,6 +30,7 @@ public class Client {
         PrintWriter pw = new PrintWriter(outputStream);
         try {
             String json = jsonMessageFactory.messageToJson(message);
+            pw.write(json);
         } catch (JsonProcessingException e) {
             System.err.println("Can't convert message to JSON");
             e.printStackTrace();

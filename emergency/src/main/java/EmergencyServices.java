@@ -4,6 +4,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.UnknownHostException;
+
 public class EmergencyServices {
     private static final String URL = "http://localhost:8080/api";
 
@@ -13,6 +15,14 @@ public class EmergencyServices {
         System.out.println("I am the EmergencyService.");
 
         server = new Server(4242);
+
+        String ip = null;
+        try {
+            ip = Server.findMachinesLocalIP().toString();
+            System.out.println("I am listening on: " + ip + ":4242");
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
 
         while (true) {
             server.waitForConnection();
