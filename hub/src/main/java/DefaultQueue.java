@@ -4,6 +4,8 @@ class DefaultQueue extends Queue {
 
 	DefaultQueue(final String host) {
 		super(host, CER_HUB_NORMAL);
+		MessageConsumer messageConsumer = new MessageConsumer(getChannel());
+		setConsumer(messageConsumer);
 	}
 
 	@Override

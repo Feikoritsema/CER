@@ -14,6 +14,7 @@ public class HeartrateSensor extends Sensor {
 		super("Heartrate Sensor");
 	}
 
+	@Override
 	void createFrame() {
 		heartrate = 70;
 		setSize(300, 200);
@@ -61,7 +62,20 @@ public class HeartrateSensor extends Sensor {
 		int diff = rng.nextInt() & Integer.MAX_VALUE % 20;
 		setHeartrate(heartrate - diff);//(heartrate < 70 ? heartrate + diff : heartrate - diff);
 		msg.setHeartrate(heartrate);
-		producer.sendMessage(msg);
+		producer.sendDefaultMessage(msg);
+	}
+
+
+	@Override
+	public void run() {
+		while (true) {
+			sendMessage();
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public static void main(String argv[]) throws Exception {

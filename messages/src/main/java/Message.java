@@ -10,7 +10,8 @@ import java.io.Serializable;
 		property = "type")
 @JsonSubTypes({
 		@JsonSubTypes.Type(value = HeartrateMessage.class, name = "heartratemessage"),
-		@JsonSubTypes.Type(value = MovementMessage.class, name = "movementmessage")
+		@JsonSubTypes.Type(value = MovementMessage.class, name = "movementmessage"),
+		@JsonSubTypes.Type(value = PanicMessage.class, name = "panicmessage")
 })
 public class Message implements Serializable {
 

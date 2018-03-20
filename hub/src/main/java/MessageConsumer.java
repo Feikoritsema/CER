@@ -49,7 +49,11 @@ public class MessageConsumer extends DefaultConsumer {
 		}
 	}
 
-	public Status updateStatus() {
+	Status updateStatus() {
+		return getHeartRateStatus();
+	}
+
+	private Status getHeartRateStatus() {
 		Integer sum = 0;
 		Integer avg;
 		if (!CollectionUtils.isEmpty(heartrateMessages)) {

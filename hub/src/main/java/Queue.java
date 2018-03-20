@@ -9,19 +9,20 @@ import java.util.concurrent.TimeoutException;
 
 abstract class Queue extends Thread {
 
+	private Channel channel;
 	private MessageConsumer consumer;
 	private List<QueueListener> listeners;
+	private String queue;
 
 	Queue(final String host, final String queue) {
 		listeners = new ArrayList<>();
+		this.queue = queue;
 		final ConnectionFactory factory = new ConnectionFactory();
 		factory.setHost(host);
 		try {
 			final Connection connection = factory.newConnection();
-			final Channel channel = connection.createChannel();
-			consumer = new MessageConsumer(channel);
+			channel = connection.createChannel();
 			channel.queueDeclare(queue, false, true, false, null);
-			channel.basicConsume(queue, true, consumer);
 		} catch (TimeoutException | IOException e) {
 			e.printStackTrace();
 		}
@@ -29,6 +30,19 @@ abstract class Queue extends Thread {
 
 	public MessageConsumer getConsumer() {
 		return consumer;
+	}
+
+	public void setConsumer(final MessageConsumer consumer) {
+		this.consumer = consumer;
+		try {
+			channel.basicConsume(queue, true, consumer);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public Channel getChannel() {
+		return channel;
 	}
 
 	public void addQueueListener(QueueListener queueListener) {

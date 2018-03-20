@@ -8,6 +8,7 @@ import java.util.concurrent.TimeoutException;
 
 public class MessageProducer {
 	public final static String CER_HUB_NORMAL = "CER_HUB_NORMAL";
+	public final static String CER_HUB_PRIORITY = "CER_HUB_PRIORITY";
 
 	private ConnectionFactory connectionFactory;
 
@@ -19,12 +20,20 @@ public class MessageProducer {
 		connectionFactory.setHost(host);
 	}
 
-	void sendMessage(Message msg) {
+	void sendDefaultMessage(final Message msg) {
+		sendMessage(msg, CER_HUB_NORMAL);
+	}
+
+	void sendPriorityMessage(final Message msg) {
+		sendMessage(msg, CER_HUB_PRIORITY);
+	}
+
+	private void sendMessage(final Message m, final String queue) {
 		try {
 			final Connection connection = connectionFactory.newConnection();
 			final Channel channel = connection.createChannel();
-			final String message = messageFactory.messageToJson(msg);
-			channel.basicPublish("", CER_HUB_NORMAL, null, message.getBytes());
+			final String message = messageFactory.messageToJson(m);
+			channel.basicPublish("", queue, null, message.getBytes());
 			channel.close();
 			connection.close();
 		} catch (IOException | TimeoutException e) {
