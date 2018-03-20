@@ -72,7 +72,7 @@ public class Server {
      * @return the local IP address this machines listens to.
      * @throws UnknownHostException if no matching ip is found.
      */
-    private static InetAddress findMachinesLocalIP() throws UnknownHostException {
+    public static InetAddress findMachinesLocalIP() throws UnknownHostException {
         try {
             Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
 
