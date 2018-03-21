@@ -58,13 +58,11 @@ public class HeartrateSensor extends Sensor {
 	void sendMessage() {
 		Random rng = new Random();
 		HeartrateMessage msg = new HeartrateMessage();
-		msg.setMessage("Heartrate msg");
 		int diff = rng.nextInt() & Integer.MAX_VALUE % 20;
 		setHeartrate(heartrate - diff);//(heartrate < 70 ? heartrate + diff : heartrate - diff);
 		msg.setHeartrate(heartrate);
 		producer.sendDefaultMessage(msg);
 	}
-
 
 	@Override
 	public void run() {

@@ -1,5 +1,6 @@
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -11,6 +12,7 @@ public class JsonMessageFactory {
 	public JsonMessageFactory() {
 		mapper = new ObjectMapper();
 		mapper.enableDefaultTyping();
+		mapper.registerModule(new JavaTimeModule()); // Timestamp support
 	}
 
 	public String messageToJson(final Message msg) throws JsonProcessingException {

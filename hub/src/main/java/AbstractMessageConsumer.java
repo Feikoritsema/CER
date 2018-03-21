@@ -7,6 +7,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,6 +47,17 @@ public abstract class AbstractMessageConsumer extends DefaultConsumer {
 				.map(clazz::cast)
 				.collect(Collectors.toList());
 	}
+
+	<T extends Message> List<T> getLastNMessages(Class<T> clazz, int n) {
+		List<T> list = getMessagesOf(clazz);
+		// sort ascending on time
+		list.sort(Comparator.comparing(Message::getTime));
+		int idx = list.size() > MAX_ELEMENTS ? list.size() - MAX_ELEMENTS : 0;
+		if (idx > 0) // clear or store unused messages?
+			clearMessages(list.subList(0, idx));
+		return list.subList(idx, list.size());
+	}
+
 
 	<T extends Message> void clearMessages(List<T> toRemove) {
 		messages.removeAll(toRemove);

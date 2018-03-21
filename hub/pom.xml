@@ -14,7 +14,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>CER</groupId>
-			<artifactId>messages</artifactId>
+			<artifactId>CER-messages</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
