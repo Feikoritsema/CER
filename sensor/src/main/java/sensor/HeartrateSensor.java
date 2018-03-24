@@ -1,3 +1,7 @@
+package sensor;
+
+import message.HeartrateMessage;
+
 import javax.swing.*;
 import javax.swing.text.NumberFormatter;
 import java.awt.*;
@@ -11,7 +15,7 @@ public class HeartrateSensor extends Sensor {
 	private Integer heartrate;
 
 	public HeartrateSensor() {
-		super("Heartrate Sensor");
+		super("Heartrate sensor.Sensor");
 	}
 
 	@Override

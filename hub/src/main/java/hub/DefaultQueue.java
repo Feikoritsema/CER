@@ -1,3 +1,5 @@
+package hub;
+
 class DefaultQueue extends Queue {
 
 	private final static String CER_HUB_NORMAL = "CER_HUB_NORMAL";

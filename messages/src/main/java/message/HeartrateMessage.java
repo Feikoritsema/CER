@@ -1,3 +1,5 @@
+package message;
+
 public class HeartrateMessage extends Message {
 
 	private Integer heartrate;

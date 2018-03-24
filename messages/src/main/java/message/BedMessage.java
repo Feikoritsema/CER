@@ -1,3 +1,7 @@
+package message;
+
+import status.BedSensorStatus;
+
 public class BedMessage extends Message {
 	private BedSensorStatus status;
 

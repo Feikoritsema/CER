@@ -1,3 +1,8 @@
+package sensor;
+
+import message.BedMessage;
+import status.BedSensorStatus;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -7,7 +12,7 @@ public class BedSensor extends Sensor {
 	private JLabel label;
 
 	BedSensor() {
-		super("Bed Sensor");
+		super("Bed sensor.Sensor");
 	}
 
 	@Override

@@ -1,3 +1,7 @@
+package sensor;
+
+import message.MovementMessage;
+
 import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDateTime;
@@ -9,7 +13,7 @@ public class MovementSensor extends Sensor {
 	private Integer msgCountLeft = 0;
 
 	MovementSensor() {
-		super("Movement Sensor");
+		super("Movement sensor.Sensor");
 	}
 
 	@Override

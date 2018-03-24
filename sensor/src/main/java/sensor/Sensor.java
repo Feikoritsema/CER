@@ -1,3 +1,5 @@
+package sensor;
+
 import javax.swing.*;
 
 abstract class Sensor extends JFrame implements Runnable {

@@ -1,6 +1,9 @@
+package hub;
+
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
+import status.Status;
 
 import java.io.IOException;
 import java.util.ArrayList;

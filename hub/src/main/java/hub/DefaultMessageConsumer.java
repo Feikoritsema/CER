@@ -1,5 +1,10 @@
+package hub;
+
 import com.rabbitmq.client.Channel;
+import message.HeartrateMessage;
+import message.MovementMessage;
 import org.springframework.util.CollectionUtils;
+import status.Status;
 
 import java.time.LocalDateTime;
 import java.util.List;

@@ -1,5 +1,8 @@
+package hub;
+
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Envelope;
+import message.PanicMessage;
 
 import java.util.List;
 

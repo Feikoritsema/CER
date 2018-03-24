@@ -1,3 +1,9 @@
+package sensor;
+
+import message.Message;
+import message.PanicMessage;
+import status.Status;
+
 import javax.swing.*;
 import java.awt.*;
 

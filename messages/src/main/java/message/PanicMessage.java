@@ -1,3 +1,7 @@
+package message;
+
+import status.Status;
+
 public class PanicMessage extends Message {
 
 	private Status status;
@@ -6,7 +10,7 @@ public class PanicMessage extends Message {
 		super();
 	}
 
-	PanicMessage(final Status s) {
+	public PanicMessage(final Status s) {
 		super();
 		status = s;
 	}

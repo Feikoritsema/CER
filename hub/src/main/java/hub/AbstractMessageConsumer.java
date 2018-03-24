@@ -1,7 +1,11 @@
+package hub;
+
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
+import message.Message;
+import message.factories.JsonMessageFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

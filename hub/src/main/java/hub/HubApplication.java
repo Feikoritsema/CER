@@ -1,3 +1,8 @@
+package hub;
+
+import org.springframework.boot.SpringApplication;
+import status.Status;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -6,7 +11,9 @@ public class HubApplication extends JFrame implements QueueListener {
 	private Status status = Status.OK;
 	private JLabel label;
 
-	public HubApplication() {
+	public static HubApplication INSTANCE;
+
+	private HubApplication() {
 		super("Hub");
 		setSize(200, 200);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -51,10 +58,17 @@ public class HubApplication extends JFrame implements QueueListener {
 	@Override
 	public void onStatusChange(final Status s) {
 		setStatus(s);
-		System.out.println("Status: " + status.name());
+		System.out.println("status.Status: " + status.name());
 	}
 
 	public static void main(String args[]) {
-		new HubApplication();
+		INSTANCE = new HubApplication();
+		SpringApplication.run(RestApplication.class, args);
+	}
+
+	public static HubApplication getInstance() {
+		if (INSTANCE == null)
+			INSTANCE = new HubApplication();
+		return INSTANCE;
 	}
 }
