@@ -1,3 +1,5 @@
+package sensor;
+
 import javax.swing.*;
 
 abstract class Sensor extends JFrame implements Runnable {
@@ -14,18 +16,4 @@ abstract class Sensor extends JFrame implements Runnable {
 	}
 
 	abstract void createFrame();
-
-	abstract void sendMessage();
-
-	@Override
-	public void run() {
-		while (true) {
-			sendMessage();
-			try {
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-	}
 }
