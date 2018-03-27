@@ -11,8 +11,8 @@ public class BedSensor extends Sensor {
 	private BedSensorStatus status;
 	private JLabel label;
 
-	BedSensor() {
-		super("Bed sensor.Sensor");
+	BedSensor(final String host) {
+		super("Bed Sensor", host);
 	}
 
 	@Override
@@ -61,8 +61,15 @@ public class BedSensor extends Sensor {
 		}
 	}
 
-	public static void main(String argv[]) throws Exception {
-		new Thread(new BedSensor()).run();
+	public static void main(String args[]) throws Exception {
+		String host = "localhost";
+		if (args.length < 1){
+			System.out.println("No host set, defaulting to localhost...");
+		} else {
+			host = args[0];
+			System.out.println("Host set to: "+ host);
+		}
+		new Thread(new BedSensor(host)).run();
 	}
 
 	public void setStatus(final BedSensorStatus status) {

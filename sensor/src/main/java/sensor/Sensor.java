@@ -4,11 +4,11 @@ import javax.swing.*;
 
 abstract class Sensor extends JFrame implements Runnable {
 
-	MessageProducer producer;
+	final MessageProducer producer;
 
-	Sensor(final String title) {
-		super(title);
-		producer = new MessageProducer("localhost");
+	Sensor(final String title, final String host) {
+		super(title + " @" + host);
+		producer = new MessageProducer(host);
 		setDefaultLookAndFeelDecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
