@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Neighbour {
+    private static JLabel responseLabel;
     private static final String URL = "http://localhost:8080/api";
 
     public static void main(String args[]){
@@ -38,12 +39,14 @@ public class Neighbour {
         JButton testMe = new JButton("TestMe");
         panel.add(testMe);
         testMe.addActionListener (new test());
+        responseLabel = new JLabel("");
+        panel.add(responseLabel);
 
 
     }
     static class test implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            System.out.println(sendGetRequest("/"));
+           sendGetRequest("/");
         }
     }
 
@@ -60,9 +63,11 @@ public class Neighbour {
         }
     }
 
-    private static ResponseEntity<String> sendGetRequest(String path){
+    private static void sendGetRequest(String path){
         RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.getForEntity(URL + path, String.class);
+        ResponseEntity<String> test = restTemplate.getForEntity(URL + path, String.class);
+        String teststring = test.getBody();
+        responseLabel.setText(teststring);
     }
 
     private static void sendStringPostRequest(String path, String message){
@@ -73,7 +78,7 @@ public class Neighbour {
         String string = response.getBody();
         HttpStatus httpStatus = response.getStatusCode();
         assert(httpStatus.equals(HttpStatus.OK));
-        System.out.println(string);
+        responseLabel.setText(string);
     }
 
 }
