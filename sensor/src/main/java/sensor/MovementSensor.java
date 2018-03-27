@@ -12,8 +12,8 @@ public class MovementSensor extends Sensor {
 	private JLabel label;
 	private Integer msgCountLeft = 0;
 
-	MovementSensor() {
-		super("Movement sensor.Sensor");
+	MovementSensor(final String host) {
+		super("Movement Sensor", host);
 	}
 
 	@Override
@@ -67,7 +67,14 @@ public class MovementSensor extends Sensor {
 		}
 	}
 
-	public static void main(String argv[]) throws Exception {
-		new Thread(new MovementSensor()).run();
+	public static void main(String args[]) throws Exception {
+		String host = "localhost";
+		if (args.length < 1){
+			System.out.println("No host set, defaulting to localhost...");
+		} else {
+			host = args[0];
+			System.out.println("Host set to: "+ host);
+		}
+		new Thread(new MovementSensor(host)).run();
 	}
 }

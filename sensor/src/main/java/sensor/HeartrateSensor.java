@@ -14,8 +14,8 @@ public class HeartrateSensor extends Sensor {
 	private JLabel label;
 	private Integer heartrate;
 
-	public HeartrateSensor() {
-		super("Heartrate sensor.Sensor");
+	private HeartrateSensor(final String host) {
+		super("Heartrate Sensor", host);
 	}
 
 	@Override
@@ -80,7 +80,14 @@ public class HeartrateSensor extends Sensor {
 		}
 	}
 
-	public static void main(String argv[]) throws Exception {
-		new Thread(new HeartrateSensor()).run();
+	public static void main(String args[]) throws Exception {
+		String host = "localhost";
+		if (args.length < 1){
+			System.out.println("No host set, defaulting to localhost...");
+		} else {
+			host = args[0];
+			System.out.println("Host set to: "+ host);
+		}
+		new Thread(new HeartrateSensor(host)).run();
 	}
 }
