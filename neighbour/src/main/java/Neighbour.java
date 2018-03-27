@@ -5,17 +5,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Neighbour {
-    private static JLabel responseLabel;
-    private static final String URL = "http://localhost:8080/api";
+    private  JLabel responseLabel;
+    private  final String URL = "http://localhost:8080/api";
 
-    public static void main(String args[]){
-
+    private Neighbour(){
         System.out.println("I am the Neighbour.");
 
         // UI part
@@ -26,51 +23,39 @@ public class Neighbour {
 
         JPanel panel = new JPanel();
         frame.add(panel);
+
         JButton openLock = new JButton("Open neighbour lock");
-        openLock.setAlignmentY(120);
         panel.add(openLock);
-        openLock.setAlignmentY(120);
-        openLock.addActionListener (new OpenLock());
+        openLock.addActionListener (e -> sendStringPostRequest("/lock", "Feiko"));
 
         JButton sendOnWay = new JButton("Notify you're coming");
         panel.add(sendOnWay);
-        sendOnWay.addActionListener (new sendOnWay());
+        sendOnWay.addActionListener (e -> sendStringPostRequest("/emergency/neighbourComing", getTime()));
 
         JButton testMe = new JButton("TestMe");
         panel.add(testMe);
-        testMe.addActionListener (new test());
+        testMe.addActionListener (e -> sendGetRequest("/"));
+
         responseLabel = new JLabel("");
         panel.add(responseLabel);
-
-
-    }
-    static class test implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-           sendGetRequest("/");
-        }
     }
 
-    static class OpenLock implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            sendStringPostRequest("/lock", "Feiko");
-        }
+    public static void main(String args[]){
+        new Neighbour();
     }
 
-    static class sendOnWay implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
-            sendStringPostRequest("/emergency/neighbourComing", timeStamp);
-        }
+    private static String getTime(){
+        return new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
     }
 
-    private static void sendGetRequest(String path){
+    private void sendGetRequest(String path){
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> test = restTemplate.getForEntity(URL + path, String.class);
         String teststring = test.getBody();
         responseLabel.setText(teststring);
     }
 
-    private static void sendStringPostRequest(String path, String message){
+    private void sendStringPostRequest(String path, String message){
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity<String> request = new HttpEntity<>(message);
         ResponseEntity<String> response = restTemplate.exchange(URL + path,

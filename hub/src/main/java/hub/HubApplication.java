@@ -10,6 +10,7 @@ public class HubApplication extends JFrame implements QueueListener {
 
 	private Status status = Status.OK;
 	private JLabel label;
+	private JLabel lockstatus;
 
 	public static HubApplication INSTANCE;
 
@@ -26,6 +27,9 @@ public class HubApplication extends JFrame implements QueueListener {
 		label.setPreferredSize(new Dimension(200, 200));
 		label.setHorizontalAlignment(SwingConstants.CENTER);
 		getContentPane().add(label, BorderLayout.CENTER);
+
+		lockstatus = new JLabel("Lock is closed");
+		getContentPane().add(lockstatus, BorderLayout.CENTER);
 
 		final Queue defaultQueue = new DefaultQueue("localhost");
 		defaultQueue.addQueueListener(this);
@@ -70,5 +74,9 @@ public class HubApplication extends JFrame implements QueueListener {
 		if (INSTANCE == null)
 			INSTANCE = new HubApplication();
 		return INSTANCE;
+	}
+
+	public void openLock(){
+		lockstatus.setText("Lock is open");
 	}
 }

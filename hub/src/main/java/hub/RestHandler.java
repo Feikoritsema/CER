@@ -22,9 +22,7 @@ public class RestHandler {
 		// Verify user who sent request
 		System.out.println("Lock POST method called");
 		if (user.equals("Feiko") || user.equals("EMERGENCYSERVICE")) {
-			// Open Lock
-
-
+			hub.openLock();
 			return new ResponseEntity<>("User: " + user + " unlocked the door.", HttpStatus.OK);
 		}
 		// Bad verification
@@ -38,7 +36,7 @@ public class RestHandler {
 		// Verify user who sent request
 		System.out.println(timestamp);
 		// Stop emergency (close em. socket etc.)
-		System.out.println("Emergency PUT method called");
+		System.out.println("Emergency POST method called");
 		return new ResponseEntity<>(timestamp + " Updated ", HttpStatus.OK);
 	}
 
