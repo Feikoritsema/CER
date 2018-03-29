@@ -1,4 +1,6 @@
 import com.fasterxml.jackson.core.JsonProcessingException;
+import message.Message;
+import message.factories.JsonMessageFactory;
 
 import java.io.DataOutputStream;
 import java.io.IOException;

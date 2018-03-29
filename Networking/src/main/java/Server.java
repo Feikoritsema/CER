@@ -1,3 +1,6 @@
+import message.Message;
+import message.factories.JsonMessageFactory;
+
 import java.io.*;
 import java.net.*;
 import java.util.Enumeration;
