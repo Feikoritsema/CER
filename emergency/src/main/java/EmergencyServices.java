@@ -1,3 +1,4 @@
+import message.Message;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -30,7 +31,7 @@ public class EmergencyServices {
             Message message;
             while (!server.isClosed()) { // TODO: Find out when to stop!
                 message = server.receive();
-                System.out.print(message.getMessage());
+//                System.out.print(message.getMessage());
             }
         }
     }
