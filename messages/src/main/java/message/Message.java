@@ -12,10 +12,11 @@ import java.time.LocalDateTime;
         include = JsonTypeInfo.As.PROPERTY,
         property = "type")
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = HeartrateMessage.class, name = "heartratemessage"),
-        @JsonSubTypes.Type(value = MovementMessage.class, name = "movementmessage"),
-        @JsonSubTypes.Type(value = PanicMessage.class, name = "panicmessage"),
-        @JsonSubTypes.Type(value = BedMessage.class, name = "bedmessage")
+		@JsonSubTypes.Type(value = HeartrateMessage.class, name = "heartratemessage"),
+		@JsonSubTypes.Type(value = MovementMessage.class, name = "movementmessage"),
+		@JsonSubTypes.Type(value = PanicMessage.class, name = "panicmessage"),
+		@JsonSubTypes.Type(value = BedMessage.class, name = "bedmessage"),
+		@JsonSubTypes.Type(value = EmergencyUpdateMessage.class, name = "emergencyupdatemessage")
 })
 
 public class Message implements Serializable {
