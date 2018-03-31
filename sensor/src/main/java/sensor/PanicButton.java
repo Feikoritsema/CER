@@ -9,8 +9,8 @@ import java.awt.*;
 
 public class PanicButton extends Sensor {
 
-	public PanicButton() {
-		super("Panic Button");
+	public PanicButton(final String host) {
+		super("Panic Button", host);
 	}
 
 	@Override
@@ -36,8 +36,15 @@ public class PanicButton extends Sensor {
 		producer.sendPriorityMessage(msg);
 	}
 
-	public static void main(String argv[]) throws Exception {
-		new PanicButton();
+	public static void main(String args[]) throws Exception {
+		String host = "localhost";
+		if (args.length < 1){
+			System.out.println("No host set, defaulting to localhost...");
+		} else {
+			host = args[0];
+			System.out.println("Host set to: "+ host);
+		}
+		new PanicButton(host);
 	}
 
 	@Override

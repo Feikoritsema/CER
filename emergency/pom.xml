@@ -11,5 +11,19 @@
 
 	<artifactId>CER-emergency</artifactId>
 
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>CER</groupId>
+			<artifactId>CER-networking</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>CER</groupId>
+			<artifactId>CER-messages</artifactId>
+		</dependency>
+	</dependencies>
 
 </project>

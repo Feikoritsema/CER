@@ -3,7 +3,9 @@ package sensor;
 import message.MovementMessage;
 
 import javax.swing.*;
+import javax.swing.text.NumberFormatter;
 import java.awt.*;
+import java.text.NumberFormat;
 import java.time.LocalDateTime;
 
 public class MovementSensor extends Sensor {
@@ -12,62 +14,67 @@ public class MovementSensor extends Sensor {
 	private JLabel label;
 	private Integer msgCountLeft = 0;
 
-	MovementSensor() {
-		super("Movement sensor.Sensor");
+	MovementSensor(final String host) {
+		super("Movement Sensor", host);
 	}
 
 	@Override
 	void createFrame() {
-		setSize(300, 200);
-		isMoving = false;
+		setPreferredSize(new Dimension(600, 200));
+		isMoving = true;
 		label = new JLabel("status");
 		label.setText(isMoving ? "Movement Detected" : "No Movememt");
 		label.setFont(new Font("Serif", Font.PLAIN, 50));
 		label.setPreferredSize(new Dimension(300, 100));
 
-		JButton submit = new JButton("Move here");
+		final JButton submit = new JButton("Move here");
 		submit.addActionListener(e -> triggerMovement());
 
-		LayoutManager layout = new BorderLayout();
+		LayoutManager layout = new GridLayout(0, 1);
 		setLayout(layout);
-		add(submit, BorderLayout.LINE_END);
-		add(label, BorderLayout.PAGE_END);
+		add(submit);
+		add(label);
 
 		pack();
 		setVisible(true);
 	}
 
-	private void triggerMovement() {
+	private synchronized void triggerMovement() {
 		isMoving = true;
 		msgCountLeft = 3;
-		label.setText("Movement Detected");
 	}
 
 	void sendMessage() {
 		MovementMessage movementMessage = new MovementMessage();
-		movementMessage.setMovement(true);
-		movementMessage.setTime(LocalDateTime.now().minusHours(5));
+		movementMessage.setMovement(isMoving);
 		producer.sendDefaultMessage(movementMessage);
+		label.setText(isMoving ? "Movement Detected" : "No Movememt");
+		if (msgCountLeft > 0)
+			msgCountLeft--;
+		else
+			isMoving = false;
 	}
 
 	@Override
 	public void run() {
 		while (true) {
-			while (isMoving && msgCountLeft > 0) {
-				sendMessage();
-				try {
-					Thread.sleep(2000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				msgCountLeft--;
-				if (msgCountLeft == 0)
-					label.setText("Movement Absent");
+			sendMessage();
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
 		}
 	}
 
-	public static void main(String argv[]) throws Exception {
-		new Thread(new MovementSensor()).run();
+	public static void main(String args[]) throws Exception {
+		String host = "localhost";
+		if (args.length < 1){
+			System.out.println("No host set, defaulting to localhost...");
+		} else {
+			host = args[0];
+			System.out.println("Host set to: "+ host);
+		}
+		new Thread(new MovementSensor(host)).run();
 	}
 }

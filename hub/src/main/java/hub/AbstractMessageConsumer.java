@@ -56,12 +56,11 @@ public abstract class AbstractMessageConsumer extends DefaultConsumer {
 		List<T> list = getMessagesOf(clazz);
 		// sort ascending on time
 		list.sort(Comparator.comparing(Message::getTime));
-		int idx = list.size() > MAX_ELEMENTS ? list.size() - MAX_ELEMENTS : 0;
+		int idx = list.size() > n ? list.size() - n : 0;
 		if (idx > 0) // clear or store unused messages?
 			clearMessages(list.subList(0, idx));
 		return list.subList(idx, list.size());
 	}
-
 
 	<T extends Message> void clearMessages(List<T> toRemove) {
 		messages.removeAll(toRemove);
