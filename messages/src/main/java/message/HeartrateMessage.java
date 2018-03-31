@@ -2,13 +2,13 @@ package message;
 
 public class HeartrateMessage extends Message {
 
-	private Integer heartrate;
+    private Integer heartrate;
 
-	public Integer getHeartrate() {
-		return heartrate;
-	}
+    public Integer getHeartrate() {
+        return heartrate;
+    }
 
-	public void setHeartrate(final Integer heartrate) {
-		this.heartrate = heartrate;
-	}
+    public void setHeartrate(final Integer heartrate) {
+        this.heartrate = heartrate;
+    }
 }

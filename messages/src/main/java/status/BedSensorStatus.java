@@ -1,7 +1,7 @@
 package status;
 
 public enum BedSensorStatus {
-	ASLEEP,
-	NOT_ASLEEP,
-	ALARM
+    ASLEEP,
+    NOT_ASLEEP,
+    ALARM
 }

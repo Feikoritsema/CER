@@ -1,24 +1,30 @@
 package hub;
 
-class DefaultQueue extends Queue {
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
-	private final static String CER_HUB_NORMAL = "CER_HUB_NORMAL";
+@Component
+class DefaultQueue extends Queue implements Runnable {
 
-	DefaultQueue(final String host) {
-		super(host, CER_HUB_NORMAL);
-		DefaultMessageConsumer messageConsumer = new DefaultMessageConsumer(getChannel());
-		setConsumer(messageConsumer);
-	}
+    private final static String CER_HUB_NORMAL = "CER_HUB_NORMAL";
 
-	@Override
-	public void run() {
-		while (true) {
-			notifyListeners(((DefaultMessageConsumer) getConsumer()).updateStatus());
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-	}
+    @Autowired
+    DefaultQueue(@Value("${host:localhost}") final String host, Hub hub) {
+        super(host, CER_HUB_NORMAL, hub);
+        setConsumer(new DefaultMessageConsumer(getChannel()));
+        new Thread(this).start();
+    }
+
+    @Override
+    public void run() {
+        while (true) {
+            update(((DefaultMessageConsumer) getConsumer()).updateStatus());
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
