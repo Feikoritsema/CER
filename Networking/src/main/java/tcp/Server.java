@@ -10,66 +10,31 @@ import java.util.Enumeration;
 public class Server {
 
     protected ServerSocket serverSocket;
-    protected Socket clientSocket;
-
-    protected DataInputStream inputStream;
-    protected DataOutputStream outputStream;
-
-    JsonMessageFactory jsonMessageFactory;
 
     public Server(int port) {
-        jsonMessageFactory = new JsonMessageFactory();
-
         try {
             this.serverSocket = new ServerSocket(port);
         } catch (IOException e) {
             System.err.println("Can't not open server socket on port: " + port);
-            System.err.print(e);
+            e.printStackTrace();
         }
     }
 
-    public void waitForConnection() {
-        try {
-            clientSocket = serverSocket.accept();
-            inputStream = new DataInputStream(clientSocket.getInputStream());
-            outputStream = new DataOutputStream(clientSocket.getOutputStream());
-        } catch (IOException e) {
-            System.err.println("Can't open client socket");
-            System.err.print(e);
-        }
-    }
-
-    public Message receive() {
-        try {
-            BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
-            StringBuilder builder = new StringBuilder();
-            String line, json;
-
-            while ((line = in.readLine()) != null) {
-                builder.append(line);
-            }
-
-            json = builder.toString();
-            return jsonMessageFactory.jsonToMessage(json);
-        } catch (IOException e) {
-            System.err.println("Can't read input");
-            System.err.print(e);
-        }
-
-        return new Message();
+    public Socket waitForConnection() throws IOException {
+        return serverSocket.accept();
     }
 
     public void close() {
         try {
-            clientSocket.close();
+            serverSocket.close();
         } catch (IOException e) {
             System.err.println("Can't close socket");
-            System.err.print(e);
+            e.printStackTrace();
         }
     }
 
     public boolean isClosed() {
-        return clientSocket.isClosed();
+        return serverSocket.isClosed();
     }
 
     /**

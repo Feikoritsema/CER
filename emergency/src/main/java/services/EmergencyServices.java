@@ -1,6 +1,5 @@
 package services;
 
-import message.EmergencyUpdateMessage;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -8,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import tcp.Server;
 
+import java.io.IOException;
+import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class EmergencyServices {
@@ -16,25 +17,25 @@ public class EmergencyServices {
     private static Server server;
 
     public static void main(String args[]) {
-        System.out.println("Emergency services control started.");
-
         server = new Server(4242);
+
+        System.out.println("Emergency services control started.");
 
         String ip = null;
         try {
             ip = Server.findMachinesLocalIP().toString();
-            System.out.println("I am listening on: " + ip + ":4242");
+            System.out.println("Emergency services listening on: " + ip + ":4242");
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
 
-        while (true) {
-            server.waitForConnection();
-
-            EmergencyUpdateMessage message;
-            while (!server.isClosed()) { // TODO: Find out when to stop!
-                message = (EmergencyUpdateMessage) server.receive();
-                System.out.print(message.getUpdate());
+        while (!server.isClosed()) {
+            try {
+                Socket clientSocket = server.waitForConnection();
+                new EmergencyHandler(clientSocket).start();
+            } catch (IOException e) {
+                System.err.println("Cannot connect to client.");
+                e.printStackTrace();
             }
         }
     }

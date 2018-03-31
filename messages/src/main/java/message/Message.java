@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 		@JsonSubTypes.Type(value = MovementMessage.class, name = "movementmessage"),
 		@JsonSubTypes.Type(value = PanicMessage.class, name = "panicmessage"),
 		@JsonSubTypes.Type(value = BedMessage.class, name = "bedmessage"),
-		@JsonSubTypes.Type(value = EmergencyUpdateMessage.class, name = "emergencyupdatemessage")
+		@JsonSubTypes.Type(value = EmergencyMessage.class, name = "emergencymessage")
 })
 
 public class Message implements Serializable {
