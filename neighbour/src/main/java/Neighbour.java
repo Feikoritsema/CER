@@ -7,8 +7,9 @@ import org.springframework.web.client.RestTemplate;
 import javax.swing.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import message.*;
 
-public class Neighbour {
+public class Neighbour extends Message {
     private  JLabel responseLabel;
     private  final String URL = "http://localhost:8080/api";
 
@@ -30,7 +31,7 @@ public class Neighbour {
 
         JButton sendOnWay = new JButton("Notify you're coming");
         panel.add(sendOnWay);
-        sendOnWay.addActionListener (e -> sendStringPostRequest("/emergency/neighbourComing", getTime()));
+        sendOnWay.addActionListener (e -> sendStringPostRequest("/emergency/neighbourComing", getDateTime()));
 
         JButton testMe = new JButton("TestMe");
         panel.add(testMe);
@@ -44,7 +45,7 @@ public class Neighbour {
         new Neighbour();
     }
 
-    private static String getTime(){
+    private static String getDateTime(){
         return new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
     }
 

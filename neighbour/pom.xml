@@ -9,5 +9,12 @@
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
+	<dependencies>
+		<dependency>
+			<groupId>CER</groupId>
+			<artifactId>CER-messages</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
 	<artifactId>CER-neighbour</artifactId>
 </project>
