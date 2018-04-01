@@ -21,7 +21,7 @@ public class EmergencyServices {
 
         System.out.println("Emergency services control started.");
 
-        String ip = null;
+        String ip;
         try {
             ip = Server.findMachinesLocalIP().toString();
             System.out.println("Emergency services listening on: " + ip + ":4242");
@@ -29,7 +29,7 @@ public class EmergencyServices {
             e.printStackTrace();
         }
 
-        while (!server.isClosed()) {
+        while (true) {
             try {
                 Socket clientSocket = server.waitForConnection();
                 new EmergencyHandler(clientSocket).start();

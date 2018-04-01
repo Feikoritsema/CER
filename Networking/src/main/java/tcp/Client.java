@@ -34,7 +34,8 @@ public class Client {
         PrintWriter pw = new PrintWriter(outputStream);
         try {
             String json = jsonMessageFactory.messageToJson(message);
-            pw.write(json);
+            pw.write(json + "\n");
+            pw.flush();
         } catch (JsonProcessingException e) {
             System.err.println("Can't convert message to JSON");
             e.printStackTrace();
@@ -44,6 +45,7 @@ public class Client {
     public void close() {
         try {
             socket.close();
+            System.out.println("Connection with " + socket.getInetAddress().getHostAddress() + " closed");
         } catch (IOException e) {
             System.err.println("Can't close socket");
             e.printStackTrace();

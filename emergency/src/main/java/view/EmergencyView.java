@@ -5,45 +5,99 @@ import services.EmergencyHandler;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 public class EmergencyView extends JFrame implements PropertyChangeListener {
 
     private JLabel label;
+    JLabel status;
+    JTextArea log;
+    JScrollPane scrollable;
 
-    EmergencyHandler handler;
     Emergency emergency;
+    EmergencyHandler handler;
 
     public EmergencyView(EmergencyHandler handler) {
-        super("Emergency: " + handler.getEmergency().getId());
+        super("Emergency @ " + handler.getEmergency().getHost());
         this.handler = handler;
         this.emergency = handler.getEmergency();
         this.emergency.addListener(this);
-        showGUI();
+        buildGUI();
     }
 
-    private void showGUI() {
-        setPreferredSize(new Dimension(600, 200));
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    private void buildGUI() {
+        setOnCloseOperation();
+
+        LayoutManager layout = new BorderLayout();
+        setLayout(layout);
+
+        setPreferredSize(new Dimension(600, 800));
         JFrame.setDefaultLookAndFeelDecorated(true);
         setLocationRelativeTo(null);
 
-        label = new JLabel("EmergencyId");
-        label.setText(String.valueOf(this.handler.getId()));
-        label.setFont(new Font("Serif", Font.PLAIN, 50));
-        label.setPreferredSize(new Dimension(200, 200));
-        label.setHorizontalAlignment(SwingConstants.CENTER);
-        getContentPane().add(label, BorderLayout.CENTER);
+        status = new JLabel("Status: Active");
+        status.setPreferredSize(new Dimension(600, 100));
+        add(status, BorderLayout.PAGE_START );
+
+        log = new JTextArea();
+        for (String message : emergency.getLog()) {
+            log.append(message + "\n");
+        }
+
+        scrollable = new JScrollPane(log);
+        scrollable.setPreferredSize(new Dimension(600, 700));
+        add(scrollable, BorderLayout.CENTER);
 
         pack();
+    }
+
+    private void setOnCloseOperation() {
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) { }
+
+            @Override
+            public void windowClosing(WindowEvent e) { }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+                handler.close();
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) { }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) { }
+
+            @Override
+            public void windowActivated(WindowEvent e) { }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) { }
+        });
+    }
+
+    public void display() {
         setVisible(true);
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent event) {
-        // TODO: Implement!
-        System.out.println(event.getPropertyName());
-        System.out.println(event.getNewValue());
+        switch (event.getPropertyName()) {
+            case "log":
+                log.append((String) event.getNewValue());
+                break;
+            case "status":
+                if ((boolean) event.getNewValue()) { // when emergency is active
+                    status.setText("Status: Active");
+                } else {
+                    status.setText("Status: Closed");
+                }
+        }
     }
 }

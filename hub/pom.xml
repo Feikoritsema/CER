@@ -16,7 +16,11 @@
             <artifactId>CER-messages</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework</groupId>
+            <groupId>CER</groupId>
+            <artifactId>CER-networking</artifactId>
+        </dependency>
+        <dependency>
+        <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
             <version>${springframework.version}</version>
         </dependency>

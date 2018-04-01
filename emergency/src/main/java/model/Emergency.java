@@ -6,46 +6,50 @@ import java.util.ArrayList;
 
 public class Emergency {
 
-    private int id;
-    private int status;
+    private String host;
+    private boolean active;
     private ArrayList<String> log;
 
     private PropertyChangeSupport changes;
 
     public Emergency() {
+        this(null);
+    }
+
+    public Emergency(String host) {
+        this.host = host;
         changes = new PropertyChangeSupport(this);
+        log = new ArrayList<>();
     }
 
     public void addListener(PropertyChangeListener listener) {
         changes.addPropertyChangeListener(listener);
     }
 
-    @SuppressWarnings (value="unchecked")
     public void addEvent(String event) {
-        ArrayList<String> old = (ArrayList<String>) log.clone();
         log.add(event);
-        changes.firePropertyChange("log", old, log);
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        int old = status;
-        this.status = status;
-        changes.firePropertyChange("status", old, status);
+        changes.firePropertyChange("log", null, event);
     }
 
     public ArrayList<String> getLog() {
         return log;
+    }
+
+    public String getHost() {
+        return host;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        boolean old = this.active;
+        this.active = active;
+        changes.firePropertyChange("status", old, active);
     }
 }
