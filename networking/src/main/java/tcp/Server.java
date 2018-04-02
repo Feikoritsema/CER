@@ -52,7 +52,7 @@ public class Server {
                     InetAddress address = inetAddresses.nextElement();
                     String ip = address.getHostAddress();
                     if (ip.indexOf("192.") == 0 || ip.indexOf("145.") == 0 || ip.indexOf("129.") == 0) {
-                        return address.toString();
+                        return ip;
                     }
                 }
             }
