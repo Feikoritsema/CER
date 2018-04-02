@@ -121,7 +121,6 @@ public class Hub extends JFrame {
                 label.setForeground(Color.BLACK);
                 status = s;
                 sendMessageToQueue(new EmergencyMessage(EmergencyMessage.Action.CLOSE, "Emergency resolved."));
-                emergencyConnectionHandler.close();
             }
         } else {
             status = s;

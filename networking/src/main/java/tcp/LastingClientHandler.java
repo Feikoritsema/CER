@@ -1,5 +1,6 @@
 package tcp;
 
+import message.EmergencyMessage;
 import message.Message;
 
 import java.util.concurrent.BlockingQueue;
@@ -30,7 +31,9 @@ public class LastingClientHandler extends Thread {
         }
         while (isConnected && !isInterrupted()) {
             try {
-                sendMessage(queue.poll(1, TimeUnit.SECONDS));
+                Message m;
+                if ((m = queue.poll(1, TimeUnit.SECONDS)) != null)
+                    sendMessage(m);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -44,5 +47,7 @@ public class LastingClientHandler extends Thread {
 
     private void sendMessage(Message m) {
         client.send(m);
+        if (EmergencyMessage.Action.CLOSE.equals(((EmergencyMessage) m).getAction()))
+            close();
     }
 }

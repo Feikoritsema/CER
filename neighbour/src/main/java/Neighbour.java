@@ -11,7 +11,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.time.format.DateTimeFormatter;
 
-public class Neighbour extends JFrame implements Runnable {
+public class Neighbour extends JFrame {
     private RestClient restClient;
     private JLabel responseLabel;
     private JLabel emergencyStatus;
@@ -30,7 +30,7 @@ public class Neighbour extends JFrame implements Runnable {
 
         }
 
-        setPreferredSize(new Dimension(500, 100));
+        setPreferredSize(new Dimension(600, 150));
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new GridLayout(2, 1));
@@ -54,33 +54,26 @@ public class Neighbour extends JFrame implements Runnable {
         add(panel);
         add(emergencyStatus);
         pack();
-    }
 
-    @Override
-    public void run() {
-        while (true) {
-            try {
-                final Socket clientSocket = server.waitForConnection();
-                new ConnectionHandler(clientSocket) {
-                    @Override
-                    protected void handle(Message message) {
-                        emergencyStatus.setText("Emergency situation, started at: " + message.getTime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss")));
-                    }
-                }.start();
-            } catch (IOException e) {
-                System.err.println("Cannot connect to client.");
-                e.printStackTrace();
-            }
+        try {
+            final Socket clientSocket = server.waitForConnection();
+            new ConnectionHandler(clientSocket) {
+                @Override
+                protected void handle(Message message) {
+                    emergencyStatus.setText("Emergency situation, started at: " + message.getTime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss")));
+                }
+            }.start();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
-
     public static void main(String args[]) {
         if (args.length > 0 && IpUtils.validate(args[0])) {
-            new Thread(new Neighbour(args[0])).start();
+            new Neighbour(args[0]);
             System.out.println("Using address " + args[0]);
         } else {
-            new Thread(new Neighbour("localhost")).start();
+            new Neighbour("localhost");
             System.out.println("Invalid address, assuming localhost");
         }
     }

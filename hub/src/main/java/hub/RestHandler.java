@@ -2,17 +2,11 @@ package hub;
 
 import hub.settings.Neighbour;
 import hub.settings.Settings;
-import message.Message;
 import message.factories.JsonMessageFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -48,46 +42,30 @@ public class RestHandler {
             try {
                 LocalDateTime time = getTimeStamp(json);
                 //hub.openLock(time,ip);
-                System.out.println("Someone unlocked the door: " + ip + " " + time);
                 return new ResponseEntity<>("You unlocked the door.", HttpStatus.OK);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        // Bad verification
-        System.out.println("Someone tried to unlock the door: " + ip);
         return new ResponseEntity<>("NOT authorized.", HttpStatus.UNAUTHORIZED);
     }
 
     @RequestMapping(value = "/emergency/neighbour_coming", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<String> neighbourComing(@RequestBody String json) {
-        // Verify user who sent request
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
                 .getRequest();
         String ip = request.getRemoteAddr();
         if (hub.validateRequestIp(ip)) {
             try {
                 LocalDateTime time = getTimeStamp(json);
-                hub.sendNeighbourComing(time,ip);
-                return new ResponseEntity<>("Updated: " + time, HttpStatus.OK);
+                hub.sendNeighbourComing(time, ip);
+                return new ResponseEntity<>("Coming: " + time, HttpStatus.OK);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        System.out.println("Unauthorized neighbour coming: " + ip);
         return new ResponseEntity<>("Unauthorized request ", HttpStatus.UNAUTHORIZED);
-    }
-
-    @RequestMapping(value = "/settings", method = RequestMethod.PUT)
-    @ResponseBody
-    public ResponseEntity<String> updateSettings() {
-        System.out.println("Settings PUT method called");
-        if (true) {
-            // Update settings
-            return new ResponseEntity<>("Settings updated", HttpStatus.OK);
-        }
-        return new ResponseEntity<>("Something went wrong", HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping(value = "/settings/neighbour")
@@ -114,9 +92,6 @@ public class RestHandler {
     }
 
     private LocalDateTime getTimeStamp(String json) throws IOException {
-        Message message;
-        message = jsonMessageFactory.jsonToMessage(json);
-        LocalDateTime time = message.getTime();
-        return time;
+        return jsonMessageFactory.jsonToMessage(json).getTime();
     }
 }
