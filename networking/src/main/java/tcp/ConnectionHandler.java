@@ -3,9 +3,11 @@ package tcp;
 import message.Message;
 import message.factories.JsonMessageFactory;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.Socket;
-import java.net.SocketException;
 
 public abstract class ConnectionHandler extends Thread {
 
@@ -25,36 +27,31 @@ public abstract class ConnectionHandler extends Thread {
     public void run() {
         try {
             inputStream = socket.getInputStream();
+            Message message;
             while (!socket.isClosed()) {
-                try {
-                    Message message = receive();
+                if ((message = receive()) != null) {
                     handle(message);
+                } else {
                     sleep(1000);
-                } catch (NullPointerException e) {
-                    System.err.println(e.getMessage());
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    System.err.println("Thread couldn't sleep.");
-                    e.printStackTrace();
                 }
             }
-        } catch (SocketException e) {
+        } catch (InterruptedException e) {
+            System.err.println("Thread couldn't sleep.");
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    protected Message receive() throws IOException, NullPointerException {
+    protected Message receive() throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         String json = reader.readLine();
 
-        if (json == null) {
-            throw new NullPointerException("Read null from socket.");
+        if (json != null && !"null".equals(json)) {
+            System.out.println("Received from " + socket.getInetAddress().getHostAddress() + ": " + json);
+            return jsonMessageFactory.jsonToMessage(json);
         }
-
-        System.out.println("Received from " + socket.getInetAddress().getHostAddress() + ": " + json);
-
-        return jsonMessageFactory.jsonToMessage(json);
+        return null;
     }
 
     public void close() {
@@ -62,7 +59,6 @@ public abstract class ConnectionHandler extends Thread {
             if (!socket.isClosed()) {
                 inputStream.close();
                 socket.close();
-
                 System.out.println("Connection with " + socket.getInetAddress().getHostAddress() + " closed.");
             }
         } catch (IOException e) {
