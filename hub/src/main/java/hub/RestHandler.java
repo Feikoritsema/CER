@@ -2,6 +2,8 @@ package hub;
 
 import hub.settings.Neighbour;
 import hub.settings.Settings;
+import message.Message;
+import message.factories.JsonMessageFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +13,9 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import status.Status;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.Null;
+import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.regex.Pattern;
 
 @RestController
@@ -18,44 +23,55 @@ import java.util.regex.Pattern;
 public class RestHandler {
 
     private final Hub hub;
-
     private final Settings settings;
+    private JsonMessageFactory jsonMessageFactory;
 
     @Autowired
     public RestHandler(Hub hub, Settings settings) {
+        jsonMessageFactory = new JsonMessageFactory();
         this.hub = hub;
         this.settings = settings;
     }
 
-    // Endpoint for opening the lock
     @RequestMapping(value = "/lock", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<String> openLock(@RequestBody String user) {
-        // Verify user who sent request
-        System.out.println("Lock POST method called");
-        if (user.equals("Feiko") || user.equals("EMERGENCYSERVICE")) {
-            // Open Lock
-
-
-            return new ResponseEntity<>("User: " + user + " unlocked the door.", HttpStatus.OK);
-        }
-        // Bad verification
-        return new ResponseEntity<>("User: " + user + " NOT authorized.", HttpStatus.UNAUTHORIZED);
-    }
-
-    // Endpoint for marking the emergency as resolved
-    @RequestMapping(value = "/emergency/neighbourComing", method = RequestMethod.GET)
-    @ResponseBody
-    public ResponseEntity<String> updateEmergency() {
-        // Verify user who sent request
-
+    public ResponseEntity<String> openLock(@RequestBody String json) {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
                 .getRequest();
-        System.out.println("Sent from: " + request.getRemoteAddr());
-        return new ResponseEntity<>(" Updated ", HttpStatus.OK);
+        String ip = request.getRemoteAddr();
+        if (hub.validateNeighbour(ip)) {
+            // TODO: Call open lock method
+            try {
+                LocalDateTime time = getTimeStamp(json);
+                //hub.openLock(time,ip);
+                return new ResponseEntity<>("Neighbour unlocked the door.", HttpStatus.OK);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        // Bad verification
+        return new ResponseEntity<>("NOT authorized.", HttpStatus.UNAUTHORIZED);
     }
 
-    // Endpoint for changing the settings
+    @RequestMapping(value = "/emergency/neighbour_coming", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<String> neighbourComing(@RequestBody String json) {
+        // Verify user who sent request
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
+                .getRequest();
+        String ip = request.getRemoteAddr();
+        if(hub.validateNeighbour(ip)){
+            try {
+                LocalDateTime time = getTimeStamp(json);
+                // hub.sendNeighbourComing(time,ip);
+                return new ResponseEntity<>("Updated", HttpStatus.OK);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return new ResponseEntity<>("Unauthorized request ", HttpStatus.UNAUTHORIZED);
+    }
+
     @RequestMapping(value = "/settings", method = RequestMethod.PUT)
     @ResponseBody
     public ResponseEntity<String> updateSettings() {
@@ -64,7 +80,6 @@ public class RestHandler {
             // Update settings
             return new ResponseEntity<>("Settings updated", HttpStatus.OK);
         }
-
         return new ResponseEntity<>("Something went wrong", HttpStatus.BAD_REQUEST);
     }
 
@@ -109,5 +124,12 @@ public class RestHandler {
 
     public static boolean validate(final String ip) {
         return PATTERN.matcher(ip).matches();
+    }
+
+    private LocalDateTime getTimeStamp(String json) throws IOException {
+        Message message;
+        message = jsonMessageFactory.jsonToMessage(json);
+        LocalDateTime time = message.getTime();
+        return time;
     }
 }

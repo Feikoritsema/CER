@@ -29,7 +29,7 @@ public class Neighbour {
         JButton sendOnWay = new JButton("Notify you're coming");
         panel.add(sendOnWay);
         sendOnWay.addActionListener (e -> responseLabel.setText(restClient.
-                sendStringPostRequest("/emergency/neighbourComing")));
+                sendStringPostRequest("/emergency/neighbour_coming")));
 
         JButton testMe = new JButton("TestMe");
         panel.add(testMe);
