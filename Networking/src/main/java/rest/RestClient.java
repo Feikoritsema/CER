@@ -9,16 +9,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 public class RestClient {
-    private final String URL = "http://localhost:8080/api";
+    private String ip;
+    private int port = 8080;
+    private String base = "/api";
     private JsonMessageFactory jsonMessageFactory;
 
-    public RestClient(){
+    public RestClient(String host){
         jsonMessageFactory = new JsonMessageFactory();
+        ip = host;
     }
 
     public String sendGetRequest(String path){
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> test = restTemplate.getForEntity(URL + path, String.class);
+        String url = "http://" + ip + port + base + path;
+        ResponseEntity<String> test = restTemplate.getForEntity(url + path, String.class);
         String teststring = test.getBody();
         return teststring;
     }
@@ -30,8 +34,8 @@ public class RestClient {
             String json = jsonMessageFactory.messageToJson(message);
             RestTemplate restTemplate = new RestTemplate();
             HttpEntity<String> request = new HttpEntity<>(json);
-            ResponseEntity<String> response = restTemplate.exchange(URL + path,
-                    HttpMethod.POST, request, String.class);
+            String url = "http://" + ip + port + base + path;
+            ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, request, String.class);
             responseMessage = response.getBody();
         } catch (JsonProcessingException e) {
             e.printStackTrace();
