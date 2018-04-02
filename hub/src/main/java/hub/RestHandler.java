@@ -43,7 +43,7 @@ public class RestHandler {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
                 .getRequest();
         String ip = request.getRemoteAddr();
-        if (hub.validateNeighbour(ip)) {
+        if (hub.validateRequestIp(ip)) {
             // TODO: Call open lock method
             try {
                 LocalDateTime time = getTimeStamp(json);
@@ -66,7 +66,7 @@ public class RestHandler {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
                 .getRequest();
         String ip = request.getRemoteAddr();
-        if (hub.validateNeighbour(ip)) {
+        if (hub.validateRequestIp(ip)) {
             try {
                 LocalDateTime time = getTimeStamp(json);
                 // hub.sendNeighbourComing(time,ip);

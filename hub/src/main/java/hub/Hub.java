@@ -18,9 +18,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.List;
 import java.util.Objects;
-import java.util.stream.IntStream;
+import java.util.Optional;
 
 @Component
 public class Hub extends JFrame {
@@ -78,7 +77,6 @@ public class Hub extends JFrame {
         addresses.add(emergencyServices);
 
         add(addresses, BorderLayout.SOUTH);
-
 
         final JComboBox<String> options = new JComboBox<>(new String[]{"Neighbour", "Emergency Service"});
 
@@ -164,9 +162,8 @@ public class Hub extends JFrame {
         return true;
     }
 
-    public boolean validateNeighbour(String address){
-        List<Neighbour> neighbours = settings.getNeighboursAsList();
-        return IntStream.range(0, neighbours.size()).anyMatch(i -> neighbours.get(i).getAddress().equals(address))
-                || address.equals(settings.getEmergencyService()) || address.equals("127.0.0.1");
+    public boolean validateRequestIp(String address) {
+        return Optional.ofNullable(address).isPresent() &&
+                (settings.getNeighboursAsList().stream().anyMatch(i -> i.getAddress().equals(address)) || address.equals(settings.getEmergencyService()) | ("127.0.0.1").equals(address));
     }
 }
