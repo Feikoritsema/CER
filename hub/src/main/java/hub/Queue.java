@@ -6,57 +6,48 @@ import com.rabbitmq.client.ConnectionFactory;
 import status.Status;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeoutException;
 
-abstract class Queue extends Thread {
+abstract class Queue {
 
-	private Channel channel;
-	private AbstractMessageConsumer consumer;
-	private List<QueueListener> listeners;
-	private String queue;
+    private final Hub hub;
+    private final String queue;
+    private Channel channel;
+    private AbstractMessageConsumer consumer;
 
-	Queue(final String host, final String queue) {
-		listeners = new ArrayList<>();
-		this.queue = queue;
-		final ConnectionFactory factory = new ConnectionFactory();
-		factory.setHost(host);
-		try {
-			final Connection connection = factory.newConnection();
-			channel = connection.createChannel();
-			channel.queueDeclare(queue, false, true, false, null);
-		} catch (TimeoutException | IOException e) {
-			e.printStackTrace();
-		}
-	}
+    Queue(final String host, final String queue, final Hub hub) {
+        this.queue = queue;
+        this.hub = hub;
+        final ConnectionFactory factory = new ConnectionFactory();
+        factory.setHost(host);
+        try {
+            final Connection connection = factory.newConnection();
+            channel = connection.createChannel();
+            channel.queueDeclare(queue, false, true, false, null);
+        } catch (TimeoutException | IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-	public AbstractMessageConsumer getConsumer() {
-		return consumer;
-	}
+    AbstractMessageConsumer getConsumer() {
+        return consumer;
+    }
 
-	public void setConsumer(final AbstractMessageConsumer consumer) {
-		this.consumer = consumer;
-		try {
-			channel.basicConsume(queue, true, consumer);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+    void setConsumer(final AbstractMessageConsumer consumer) {
+        this.consumer = consumer;
+        try {
+            channel.basicConsume(queue, true, consumer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-	public Channel getChannel() {
-		return channel;
-	}
+    Channel getChannel() {
+        return channel;
+    }
 
-	public void addQueueListener(QueueListener queueListener) {
-		listeners.add(queueListener);
-	}
-
-	public void removeQueueListener(QueueListener queueListener) {
-		listeners.remove(queueListener);
-	}
-
-	public void notifyListeners(final Status s) {
-		listeners.forEach(e -> e.onStatusChange(s));
-	}
+    void update(final Status s) {
+        if (hub.getStatus() != s)
+            hub.setStatus(s);
+    }
 }

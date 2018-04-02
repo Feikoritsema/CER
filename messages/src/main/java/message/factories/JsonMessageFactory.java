@@ -10,25 +10,25 @@ import java.io.IOException;
 
 public class JsonMessageFactory {
 
-	private ObjectMapper mapper;
+    private ObjectMapper mapper;
 
-	public JsonMessageFactory() {
-		mapper = new ObjectMapper();
-		mapper.enableDefaultTyping();
-		mapper.registerModule(new JavaTimeModule()); // Timestamp support
-	}
+    public JsonMessageFactory() {
+        mapper = new ObjectMapper();
+        mapper.enableDefaultTyping();
+        mapper.registerModule(new JavaTimeModule()); // Timestamp support
+    }
 
-	public String messageToJson(final Message msg) throws JsonProcessingException {
-		return mapper.writeValueAsString(msg);
-	}
+    public String messageToJson(final Message msg) throws JsonProcessingException {
+        return mapper.writeValueAsString(msg);
+    }
 
-	public Message jsonToMessage(final String json) throws IOException {
-		return mapper.readValue(json, Message.class);
-	}
+    public Message jsonToMessage(final String json) throws IOException {
+        return mapper.readValue(json, Message.class);
+    }
 
-	public Message inputStreamToMessage(final ByteArrayInputStream is) throws IOException {
-		return mapper.readValue(is, Message.class);
-	}
+    public Message inputStreamToMessage(final ByteArrayInputStream is) throws IOException {
+        return mapper.readValue(is, Message.class);
+    }
 
 
 }
