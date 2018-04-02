@@ -1,8 +1,6 @@
 import rest.RestClient;
 
 import javax.swing.*;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class Neighbour {
     private RestClient restClient;
@@ -41,10 +39,6 @@ public class Neighbour {
 
     public static void main(String args[]){
         new Neighbour();
-    }
-
-    private static String getDateTime(){
-        return new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
     }
 
 }
