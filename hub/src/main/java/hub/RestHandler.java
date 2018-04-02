@@ -22,7 +22,7 @@ public class RestHandler {
 
     private final Hub hub;
     private final Settings settings;
-    private JsonMessageFactory jsonMessageFactory;
+    private final JsonMessageFactory jsonMessageFactory;
 
     @Autowired
     public RestHandler(Hub hub, Settings settings) {

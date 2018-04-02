@@ -59,7 +59,7 @@ public class HeartrateSensor extends Sensor {
 		return new JFormattedTextField(formatter);
 	}
 
-	void sendMessage() {
+	private void sendMessage() {
 		Random rng = new Random();
 		HeartrateMessage msg = new HeartrateMessage();
 		if (heartrate > 0){

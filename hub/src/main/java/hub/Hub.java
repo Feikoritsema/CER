@@ -34,10 +34,9 @@ public class Hub extends JFrame {
 
     private Status status = Status.OK;
     private JLabel label;
-    private Settings settings;
-    private String address;
+    private final Settings settings;
+    private final String address;
 
-    private LastingClientHandler emergencyConnectionHandler;
     private BlockingQueue<Message> queue;
 
 
@@ -172,7 +171,7 @@ public class Hub extends JFrame {
 
     private void initializeEmergencySequence() {
         queue = new LinkedBlockingQueue<>();
-        emergencyConnectionHandler = new LastingClientHandler(settings.getEmergencyService(), 4242, queue);
+        LastingClientHandler emergencyConnectionHandler = new LastingClientHandler(settings.getEmergencyService(), 4242, queue);
         emergencyConnectionHandler.start();
         sendMessageToQueue(new EmergencyMessage(EmergencyMessage.Action.OPEN, "New Emergency procedure started."));
 

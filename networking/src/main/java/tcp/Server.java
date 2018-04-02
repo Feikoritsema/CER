@@ -1,15 +1,12 @@
 package tcp;
 
-import message.Message;
-import message.factories.JsonMessageFactory;
-
-import java.io.*;
+import java.io.IOException;
 import java.net.*;
 import java.util.Enumeration;
 
 public class Server {
 
-    protected ServerSocket serverSocket;
+    private ServerSocket serverSocket;
 
     public Server(int port) {
         try {
@@ -24,21 +21,7 @@ public class Server {
         return serverSocket.accept();
     }
 
-    public void close() {
-        try {
-            serverSocket.close();
-        } catch (IOException e) {
-            System.err.println("Can't close socket");
-            e.printStackTrace();
-        }
-    }
-
-    public boolean isClosed() {
-        return serverSocket.isClosed();
-    }
-
     /**
-     *
      * @return the local IP address this machines listens to.
      * @throws UnknownHostException if no matching ip is found.
      */

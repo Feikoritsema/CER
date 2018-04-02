@@ -8,7 +8,7 @@ import java.util.List;
 
 @Component
 public class Settings {
-    private DefaultListModel<Neighbour> neighbours;
+    private final DefaultListModel<Neighbour> neighbours;
     private String emergencyService;
     private String lock;
 

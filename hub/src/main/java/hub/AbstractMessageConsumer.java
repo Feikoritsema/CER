@@ -15,11 +15,11 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public abstract class AbstractMessageConsumer extends DefaultConsumer {
-    public static final int MAX_ELEMENTS = 10;
+abstract class AbstractMessageConsumer extends DefaultConsumer {
+    static final int MAX_ELEMENTS = 10;
 
     private final JsonMessageFactory messageFactory;
-    private List<Message> messages;
+    private final List<Message> messages;
 
     public AbstractMessageConsumer(final Channel channel) {
         super(channel);
@@ -61,7 +61,7 @@ public abstract class AbstractMessageConsumer extends DefaultConsumer {
         return list.subList(idx, list.size());
     }
 
-    <T extends Message> void clearMessages(List<T> toRemove) {
+    private <T extends Message> void clearMessages(List<T> toRemove) {
         messages.removeAll(toRemove);
     }
 }

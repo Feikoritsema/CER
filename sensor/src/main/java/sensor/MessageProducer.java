@@ -10,13 +10,13 @@ import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
 
-public class MessageProducer {
-	public final static String CER_HUB_NORMAL = "CER_HUB_NORMAL";
-	public final static String CER_HUB_PRIORITY = "CER_HUB_PRIORITY";
+class MessageProducer {
+	private final static String CER_HUB_NORMAL = "CER_HUB_NORMAL";
+	private final static String CER_HUB_PRIORITY = "CER_HUB_PRIORITY";
 
-	private ConnectionFactory connectionFactory;
+	private final ConnectionFactory connectionFactory;
 
-	private JsonMessageFactory messageFactory;
+	private final JsonMessageFactory messageFactory;
 
 	public MessageProducer(final String host) {
 		connectionFactory = new ConnectionFactory();

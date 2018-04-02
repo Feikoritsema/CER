@@ -11,11 +11,11 @@ import java.net.Socket;
 
 public abstract class ConnectionHandler extends Thread {
 
-    protected Socket socket;
+    private final Socket socket;
 
-    protected InputStream inputStream;
+    private InputStream inputStream;
 
-    JsonMessageFactory jsonMessageFactory;
+    private final JsonMessageFactory jsonMessageFactory;
 
     public ConnectionHandler(Socket socket) {
         this.socket = socket;
@@ -43,7 +43,7 @@ public abstract class ConnectionHandler extends Thread {
         }
     }
 
-    protected Message receive() throws IOException {
+    private Message receive() throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         String json = reader.readLine();
 

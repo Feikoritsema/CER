@@ -3,10 +3,7 @@ package sensor;
 import message.MovementMessage;
 
 import javax.swing.*;
-import javax.swing.text.NumberFormatter;
 import java.awt.*;
-import java.text.NumberFormat;
-import java.time.LocalDateTime;
 
 public class MovementSensor extends Sensor {
 
@@ -14,7 +11,7 @@ public class MovementSensor extends Sensor {
 	private JLabel label;
 	private Integer msgCountLeft = 0;
 
-	MovementSensor(final String host) {
+	private MovementSensor(final String host) {
 		super("Movement Sensor", host);
 	}
 
@@ -44,7 +41,7 @@ public class MovementSensor extends Sensor {
 		msgCountLeft = 3;
 	}
 
-	void sendMessage() {
+	private void sendMessage() {
 		MovementMessage movementMessage = new MovementMessage();
 		movementMessage.setMovement(isMoving);
 		producer.sendDefaultMessage(movementMessage);

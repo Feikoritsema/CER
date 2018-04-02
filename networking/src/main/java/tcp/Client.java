@@ -9,12 +9,12 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class Client {
+class Client {
 
-    protected Socket socket;
-    protected DataOutputStream outputStream;
+    private Socket socket;
+    private DataOutputStream outputStream;
 
-    JsonMessageFactory jsonMessageFactory;
+    private final JsonMessageFactory jsonMessageFactory;
 
     public Client() {
         jsonMessageFactory = new JsonMessageFactory();
