@@ -148,4 +148,8 @@ public class Hub extends JFrame {
         }
         return true;
     }
+
+    public Boolean validateNeighbour(String address){
+        return true;
+    }
 }

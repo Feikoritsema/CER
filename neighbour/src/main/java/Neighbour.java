@@ -1,84 +1,57 @@
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestTemplate;
+import rest.RestClient;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.regex.Pattern;
 
 public class Neighbour {
-    private static JLabel responseLabel;
-    private static final String URL = "http://localhost:8080/api";
+    private RestClient restClient;
+    private JLabel responseLabel;
 
-    public static void main(String args[]){
-
+    private Neighbour(String host){
         System.out.println("I am the Neighbour.");
-
+        restClient = new RestClient(host);
         // UI part
-        JFrame frame = new JFrame("Test");
+        JFrame frame = new JFrame("Neighbour");
         frame.setVisible(true);
         frame.setSize(500,100);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JPanel panel = new JPanel();
         frame.add(panel);
+
         JButton openLock = new JButton("Open neighbour lock");
-        openLock.setAlignmentY(120);
         panel.add(openLock);
-        openLock.setAlignmentY(120);
-        openLock.addActionListener (new OpenLock());
+        openLock.addActionListener (e -> responseLabel.setText(restClient
+                .sendStringPostRequest("/lock/")));
 
         JButton sendOnWay = new JButton("Notify you're coming");
         panel.add(sendOnWay);
-        sendOnWay.addActionListener (new sendOnWay());
+        sendOnWay.addActionListener (e -> responseLabel.setText(restClient.
+                sendStringPostRequest("/emergency/neighbour_coming")));
 
         JButton testMe = new JButton("TestMe");
         panel.add(testMe);
-        testMe.addActionListener (new test());
+        testMe.addActionListener (e -> responseLabel.setText(restClient.sendGetRequest("/")));
+
         responseLabel = new JLabel("");
         panel.add(responseLabel);
-
-
     }
-    static class test implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-           sendGetRequest("/");
+
+    public static void main(String args[]){
+        if (args.length > 0 && validate(args[0])){
+            new Neighbour(args[0]);
+            System.out.println("Using address " + args[0]);
+        } else {
+            new Neighbour("localhost");
+            System.out.println("Invalid address, assuming localhost");
         }
     }
 
-    static class OpenLock implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            sendStringPostRequest("/lock", "Feiko");
-        }
-    }
+    private static final Pattern PATTERN = Pattern.compile(
+            "^(([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.){3}([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
 
-    static class sendOnWay implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
-            sendStringPostRequest("/emergency/neighbourComing", timeStamp);
-        }
-    }
-
-    private static void sendGetRequest(String path){
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> test = restTemplate.getForEntity(URL + path, String.class);
-        String teststring = test.getBody();
-        responseLabel.setText(teststring);
-    }
-
-    private static void sendStringPostRequest(String path, String message){
-        RestTemplate restTemplate = new RestTemplate();
-        HttpEntity<String> request = new HttpEntity<>(message);
-        ResponseEntity<String> response = restTemplate.exchange(URL + path,
-                HttpMethod.POST, request, String.class);
-        String string = response.getBody();
-        HttpStatus httpStatus = response.getStatusCode();
-        assert(httpStatus.equals(HttpStatus.OK));
-        responseLabel.setText(string);
+    public static boolean validate(final String ip) {
+        return PATTERN.matcher(ip).matches();
     }
 
 }

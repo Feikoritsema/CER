@@ -16,5 +16,9 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>CER</groupId>
+			<artifactId>CER-networking</artifactId>
+		</dependency>
 	</dependencies>
 </project>
