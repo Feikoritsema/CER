@@ -7,16 +7,21 @@ import message.factories.JsonMessageFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import status.Status;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.Null;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.regex.Pattern;
+
+import static tcp.IpUtils.validate;
 
 @RestController
 @RequestMapping("/api")
@@ -60,7 +65,7 @@ public class RestHandler {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
                 .getRequest();
         String ip = request.getRemoteAddr();
-        if(hub.validateNeighbour(ip)){
+        if (hub.validateNeighbour(ip)) {
             try {
                 LocalDateTime time = getTimeStamp(json);
                 // hub.sendNeighbourComing(time,ip);
@@ -115,15 +120,6 @@ public class RestHandler {
             return new ResponseEntity<>(address, HttpStatus.OK);
         }
         return new ResponseEntity<>("Invalid address", HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
-    //TODO extract to Util
-
-    private static final Pattern PATTERN = Pattern.compile(
-            "^(([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.){3}([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
-
-    public static boolean validate(final String ip) {
-        return PATTERN.matcher(ip).matches();
     }
 
     private LocalDateTime getTimeStamp(String json) throws IOException {
