@@ -1,4 +1,5 @@
 import rest.RestClient;
+import tcp.IpUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -36,7 +37,7 @@ public class Neighbour extends JFrame {
     }
 
     public static void main(String args[]) {
-        if (args.length > 0 && validate(args[0])) {
+        if (args.length > 0 && IpUtils.validate(args[0])) {
             new Neighbour(args[0]);
             System.out.println("Using address " + args[0]);
         } else {
