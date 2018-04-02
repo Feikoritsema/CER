@@ -72,6 +72,7 @@ public class EmergencyView extends JFrame implements PropertyChangeListener {
         unlock.addActionListener(e -> {
             RestClient restClient = new RestClient(emergency.getHost());
             ResponseEntity<String> response = restClient.sendStringPostRequest("/lock");
+            emergency.doorUnlocked();
             System.out.println(response.getStatusCode() + ": " + response.getBody());
         });
 
