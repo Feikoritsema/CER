@@ -8,15 +8,15 @@ import java.time.LocalDateTime;
 
 
 @JsonTypeInfo(
-        use = JsonTypeInfo.Id.NAME,
-        include = JsonTypeInfo.As.PROPERTY,
-        property = "type")
+    use = JsonTypeInfo.Id.NAME,
+    include = JsonTypeInfo.As.PROPERTY,
+    property = "type")
 @JsonSubTypes({
-		@JsonSubTypes.Type(value = HeartrateMessage.class, name = "heartratemessage"),
-		@JsonSubTypes.Type(value = MovementMessage.class, name = "movementmessage"),
-		@JsonSubTypes.Type(value = PanicMessage.class, name = "panicmessage"),
-		@JsonSubTypes.Type(value = BedMessage.class, name = "bedmessage"),
-		@JsonSubTypes.Type(value = EmergencyMessage.class, name = "emergencymessage")
+    @JsonSubTypes.Type(value = HeartrateMessage.class, name = "heartratemessage"),
+    @JsonSubTypes.Type(value = MovementMessage.class, name = "movementmessage"),
+    @JsonSubTypes.Type(value = PanicMessage.class, name = "panicmessage"),
+    @JsonSubTypes.Type(value = BedMessage.class, name = "bedmessage"),
+    @JsonSubTypes.Type(value = EmergencyMessage.class, name = "emergencymessage")
 })
 
 public class Message implements Serializable {
