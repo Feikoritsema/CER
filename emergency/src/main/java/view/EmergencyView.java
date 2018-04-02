@@ -1,6 +1,7 @@
 package view;
 
 import model.Emergency;
+import rest.RestClient;
 import services.EmergencyHandler;
 
 import javax.swing.*;
@@ -39,8 +40,9 @@ public class EmergencyView extends JFrame implements PropertyChangeListener {
         setLocationRelativeTo(null);
 
         status = new JLabel("Status: Active");
-        status.setPreferredSize(new Dimension(600, 100));
-        add(status, BorderLayout.PAGE_START );
+        status.setFont(new Font("Serif", Font.PLAIN, 30));
+        status.setPreferredSize(new Dimension(200, 100));
+        add(status, BorderLayout.PAGE_START);
 
         log = new JTextArea();
         for (String message : emergency.getLog()) {
@@ -51,7 +53,30 @@ public class EmergencyView extends JFrame implements PropertyChangeListener {
         scrollable.setPreferredSize(new Dimension(600, 700));
         add(scrollable, BorderLayout.CENTER);
 
+        JPanel buttonPanel = createButtonPanel();
+        add(buttonPanel, BorderLayout.PAGE_END);
+
         pack();
+    }
+
+    private JPanel createButtonPanel() {
+        JPanel panel = new JPanel();
+
+        LayoutManager layout = new BorderLayout();
+        panel.setLayout(layout);
+
+        JButton unlock = new JButton("Unlock door");
+        unlock.setPreferredSize(new Dimension(200, 50));
+        // TODO: Show some confirmation of unlocking
+        unlock.addActionListener(e -> {
+            RestClient restClient = new RestClient(emergency.getHost());
+            String result = restClient.sendStringPostRequest("/lock");
+            System.out.println(result);
+        });
+
+        panel.add(unlock, BorderLayout.LINE_START);
+
+        return panel;
     }
 
     private void setOnCloseOperation() {
@@ -96,7 +121,7 @@ public class EmergencyView extends JFrame implements PropertyChangeListener {
                 if ((boolean) event.getNewValue()) { // when emergency is active
                     status.setText("Status: Active");
                 } else {
-                    status.setText("Status: Closed");
+                    status.setText("Status: Resolved");
                 }
         }
     }

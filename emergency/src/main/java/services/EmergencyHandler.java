@@ -30,6 +30,8 @@ public class EmergencyHandler extends ConnectionHandler {
             case OPEN:
                 emergency.addEvent(parseMessage(emergencyMessage));
                 emergency.setActive(true);
+                emergency.setStartedAt(emergencyMessage.getTime());
+                EmergencyServices.addEmergency(emergency);
                 view.display();
                 break;
             case UPDATE:
@@ -39,6 +41,7 @@ public class EmergencyHandler extends ConnectionHandler {
                 close();
                 emergency.addEvent(parseMessage(emergencyMessage));
                 emergency.setActive(false);
+                EmergencyServices.update();
                 return;
             default:
                 System.out.println("Unrecognized action.");
@@ -56,7 +59,10 @@ public class EmergencyHandler extends ConnectionHandler {
         return emergency;
     }
 
-    public void setEmergency(Emergency emergency) {
-        this.emergency = emergency;
+    @Override
+    public void close() {
+        super.close();
+        emergency.setActive(false);
+        EmergencyServices.update();
     }
 }
