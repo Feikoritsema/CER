@@ -41,7 +41,8 @@ public class RestHandler {
             // TODO: Call open lock method
             try {
                 LocalDateTime time = getTimeStamp(json);
-                //hub.openLock(time,ip);
+                hub.openLock(time);
+                System.out.println("Someone unlocked the door: " + ip + " " + time);
                 return new ResponseEntity<>("You unlocked the door.", HttpStatus.OK);
             } catch (IOException e) {
                 e.printStackTrace();

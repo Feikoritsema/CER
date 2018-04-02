@@ -190,4 +190,11 @@ public class Hub extends JFrame {
                     setStatus(Status.HANDLED_EMERGENCY);
                 });
     }
+
+    public boolean openLock(LocalDateTime time) {
+        Message message = new Message();
+        new ClientHandler("localhost", 9090, message).start();
+
+        return true;
+    }
 }

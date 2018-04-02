@@ -26,7 +26,18 @@ public class Lock {
     }
 
     public void setLocked(boolean locked) {
-        changes.firePropertyChange("locked", this.locked, locked);
         this.locked = locked;
+
+        if (locked) {
+            System.out.println("The door has been locked.");
+        } else {
+            System.out.println("The door has been unlocked.");
+        }
+
+        changes.firePropertyChange("locked", null, locked);
+    }
+
+    public void toggle() {
+        setLocked(!locked);
     }
 }

@@ -3,6 +3,8 @@ package view;
 import model.Lock;
 
 import javax.swing.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.net.URL;
@@ -31,31 +33,51 @@ public class StatusView extends JFrame implements PropertyChangeListener {
     }
 
     private void buildGUI() {
+        label = new JLabel();
+
         createLabel();
+
+        label.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                lock.toggle();
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) { }
+
+            @Override
+            public void mouseReleased(MouseEvent e) { }
+
+            @Override
+            public void mouseEntered(MouseEvent e) { }
+
+            @Override
+            public void mouseExited(MouseEvent e) { }
+        });
+
+        add(label);
         pack();
     }
 
     private void update() {
-        remove(label);
         createLabel();
     }
 
     private void createLabel() {
         if (lock.isLocked()) {
             if (lockedImage != null) {
-                label = new JLabel(new ImageIcon(lockedImage));
+                label.setIcon(new ImageIcon(lockedImage));
             } else {
-                label = new JLabel("Locked");
+                label.setText("Locked");
             }
         } else {
             if (unlockedImage != null) {
-                label = new JLabel(new ImageIcon(unlockedImage));
+                label.setIcon(new ImageIcon(unlockedImage));
             } else {
-                label = new JLabel("Unlocked");
+                label.setText("Unlocked");
             }
         }
-
-        add(label);
     }
 
     @Override
