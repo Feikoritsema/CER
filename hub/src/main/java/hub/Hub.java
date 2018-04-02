@@ -2,6 +2,7 @@ package hub;
 
 import hub.settings.Neighbour;
 import hub.settings.Settings;
+import message.EmergencyMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 import status.Status;
+import tcp.Client;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,6 +26,8 @@ public class Hub extends JFrame {
     private final JLabel label;
     private Settings settings;
     private String address;
+
+    private static Client emergencyConnection;
 
     @Autowired
     public Hub(@Value("${host:localhost}") final String host, final Settings settings) {
@@ -99,10 +103,21 @@ public class Hub extends JFrame {
     }
 
     public synchronized void setStatus(final Status s) {
+        // TODO: Implement sending message when neightbour reacts
+        if (status == Status.OK && s == Status.UNHANDLED_EMERGENCY) {
+            System.out.println("Sending message now!");
+            emergencyConnection = new Client();
+            emergencyConnection.connectTo("localhost", 4242);
+            EmergencyMessage message = new EmergencyMessage(EmergencyMessage.Action.OPEN, "New Emergency procedure started.");
+            emergencyConnection.send(message);
+        }
+
         if (status == Status.UNHANDLED_EMERGENCY) {
             if (s == Status.HANDLED_EMERGENCY) {
                 label.setForeground(Color.BLACK);
                 status = s;
+                emergencyConnection.send(new EmergencyMessage(EmergencyMessage.Action.CLOSE, "Emergency resolved."));
+                emergencyConnection.close();
             }
         } else {
             status = s;
