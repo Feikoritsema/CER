@@ -24,5 +24,12 @@
         </plugins>
     </build>
 
+    <dependencies>
+        <dependency>
+            <groupId>CER</groupId>
+            <artifactId>CER-networking</artifactId>
+        </dependency>
+    </dependencies>
+
 
 </project>
