@@ -18,6 +18,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -165,5 +166,13 @@ public class Hub extends JFrame {
     public boolean validateRequestIp(String address) {
         return Optional.ofNullable(address).isPresent() &&
                 (settings.getNeighboursAsList().stream().anyMatch(i -> i.getAddress().equals(address)) || address.equals(settings.getEmergencyService()) | ("127.0.0.1").equals(address));
+    }
+
+    public boolean openLock(LocalDateTime time) {
+        Client socketClient = new Client();
+        socketClient.connectTo("localhost", 9090); // TODO: CHange to lock settings
+
+        Message message = new Message();
+        return socketClient.send(message);
     }
 }
