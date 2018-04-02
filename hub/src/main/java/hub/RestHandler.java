@@ -69,8 +69,7 @@ public class RestHandler {
         if (hub.validateRequestIp(ip)) {
             try {
                 LocalDateTime time = getTimeStamp(json);
-                // hub.sendNeighbourComing(time,ip);
-                System.out.println("Neighbour coming : " + ip + " " + time);
+                hub.sendNeighbourComing(time,ip);
                 return new ResponseEntity<>("Updated: " + time, HttpStatus.OK);
             } catch (IOException e) {
                 e.printStackTrace();

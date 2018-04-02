@@ -34,4 +34,8 @@ public class Settings {
     public List<Neighbour> getNeighboursAsList() {
         return IteratorUtils.toList(neighbours.elements().asIterator());
     }
+
+    public void update(Neighbour n) {
+        neighbours.setElementAt(n, neighbours.indexOf(n));
+    }
 }
