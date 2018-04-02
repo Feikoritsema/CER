@@ -1,6 +1,7 @@
 package view;
 
 import model.Emergency;
+import org.springframework.http.ResponseEntity;
 import rest.RestClient;
 import services.EmergencyHandler;
 
@@ -70,8 +71,8 @@ public class EmergencyView extends JFrame implements PropertyChangeListener {
         // TODO: Show some confirmation of unlocking
         unlock.addActionListener(e -> {
             RestClient restClient = new RestClient(emergency.getHost());
-            String result = restClient.sendStringPostRequest("/lock");
-            System.out.println(result);
+            ResponseEntity<String> response = restClient.sendStringPostRequest("/lock");
+            System.out.println(response.getStatusCode() + ": " + response.getBody());
         });
 
         panel.add(unlock, BorderLayout.LINE_START);
