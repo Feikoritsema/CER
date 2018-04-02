@@ -19,6 +19,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.BlockingQueue;
@@ -119,7 +121,6 @@ public class Hub extends JFrame {
                 label.setForeground(Color.BLACK);
                 status = s;
                 sendMessageToQueue(new EmergencyMessage(EmergencyMessage.Action.CLOSE, "Emergency resolved."));
-                emergencyConnectionHandler.close();
             }
         } else {
             status = s;
@@ -175,5 +176,18 @@ public class Hub extends JFrame {
         return Optional.ofNullable(address).isPresent() &&
                 (settings.getNeighboursAsList().stream().anyMatch(i -> i.getAddress().equals(address)) ||
                         address.equals(settings.getEmergencyService()) | ("127.0.0.1").equals(address));
+    }
+
+    public void sendNeighbourComing(LocalDateTime time, String ip) {
+        settings.getNeighboursAsList()
+                .stream()
+                .filter(e -> e.getAddress().equals(ip))
+                .findFirst()
+                .ifPresent(e -> {
+                    e.setComing(true);
+                    settings.update(e);
+                    sendMessageToQueue(new EmergencyMessage(EmergencyMessage.Action.UPDATE, ip + " coming at " + time.format(DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss"))));
+                    setStatus(Status.HANDLED_EMERGENCY);
+                });
     }
 }

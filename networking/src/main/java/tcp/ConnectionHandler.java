@@ -47,7 +47,7 @@ public abstract class ConnectionHandler extends Thread {
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         String json = reader.readLine();
 
-        if (json != null && !"null".equals(json)) {
+        if (json != null) {
             System.out.println("Received from " + socket.getInetAddress().getHostAddress() + ": " + json);
             return jsonMessageFactory.jsonToMessage(json);
         }

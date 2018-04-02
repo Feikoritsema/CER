@@ -1,10 +1,10 @@
 package rest;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import message.Message;
 import message.factories.JsonMessageFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
@@ -21,15 +21,16 @@ public class RestClient {
 
     public ResponseEntity<String> sendStringPostRequest(String path) {
         Message message = new Message();
-        ResponseEntity<String> response = null;
+        ResponseEntity<String> response;
         try {
             String json = jsonMessageFactory.messageToJson(message);
             RestTemplate restTemplate = new RestTemplate();
             HttpEntity<String> request = new HttpEntity<>(json);
             String url = "http://" + ip + ":" + port + base + path;
             response = restTemplate.exchange(url, HttpMethod.POST, request, String.class);
-        } catch (JsonProcessingException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            return new ResponseEntity<>("Error sending request", HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return response;
     }
