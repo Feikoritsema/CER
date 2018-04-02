@@ -5,7 +5,6 @@ import message.Message;
 import message.factories.JsonMessageFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
@@ -15,7 +14,7 @@ public class RestClient {
     private String base = "/api";
     private JsonMessageFactory jsonMessageFactory;
 
-    public RestClient(String host){
+    public RestClient(String host) {
         jsonMessageFactory = new JsonMessageFactory();
         ip = host;
     }

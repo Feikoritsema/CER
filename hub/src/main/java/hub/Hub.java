@@ -12,7 +12,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 import status.Status;
-import tcp.Client;
+import tcp.ClientHandler;
+import tcp.LastingClientHandler;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,6 +21,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 @Component
 public class Hub extends JFrame {
@@ -29,7 +32,9 @@ public class Hub extends JFrame {
     private Settings settings;
     private String address;
 
-    private static Client emergencyConnection;
+    private LastingClientHandler emergencyConnectionHandler;
+    private BlockingQueue<Message> queue;
+
 
     @Autowired
     public Hub(@Value("${host:localhost}") final String host, final Settings settings) {
@@ -113,8 +118,8 @@ public class Hub extends JFrame {
             if (s == Status.HANDLED_EMERGENCY) {
                 label.setForeground(Color.BLACK);
                 status = s;
-                emergencyConnection.send(new EmergencyMessage(EmergencyMessage.Action.CLOSE, "Emergency resolved."));
-                emergencyConnection.close();
+                sendMessageToQueue(new EmergencyMessage(EmergencyMessage.Action.CLOSE, "Emergency resolved."));
+                emergencyConnectionHandler.close();
             }
         } else {
             status = s;
@@ -122,24 +127,28 @@ public class Hub extends JFrame {
         if (s == Status.UNHANDLED_EMERGENCY) {
             label.setForeground(Color.RED);
         }
-
         label.setText(status.name());
     }
 
     private void initializeEmergencySequence() {
-        System.out.println("Sending message now!");
-        emergencyConnection = new Client();
-        emergencyConnection.connectTo(settings.getEmergencyService(), 4242);
-        EmergencyMessage message = new EmergencyMessage(EmergencyMessage.Action.OPEN, "New Emergency procedure started.");
-        emergencyConnection.send(message);
+        queue = new LinkedBlockingQueue<>();
+        emergencyConnectionHandler = new LastingClientHandler(settings.getEmergencyService(), 4242, queue);
+        emergencyConnectionHandler.start();
+        sendMessageToQueue(new EmergencyMessage(EmergencyMessage.Action.OPEN, "New Emergency procedure started."));
+
         settings.getNeighboursAsList().forEach(this::alertNeighbour);
     }
 
+    private void sendMessageToQueue(final Message message) {
+        try {
+            queue.put(message);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void alertNeighbour(Neighbour neighbour) {
-        final Client client = new Client();
-        client.connectTo(neighbour.getAddress(), 8090);
-        client.send(new Message());
-        client.close();
+        new ClientHandler(neighbour.getAddress(), 8090, new Message()).start();
     }
 
     public Status getStatus() {
@@ -164,6 +173,7 @@ public class Hub extends JFrame {
 
     public boolean validateRequestIp(String address) {
         return Optional.ofNullable(address).isPresent() &&
-                (settings.getNeighboursAsList().stream().anyMatch(i -> i.getAddress().equals(address)) || address.equals(settings.getEmergencyService()) | ("127.0.0.1").equals(address));
+                (settings.getNeighboursAsList().stream().anyMatch(i -> i.getAddress().equals(address)) ||
+                        address.equals(settings.getEmergencyService()) | ("127.0.0.1").equals(address));
     }
 }
