@@ -41,7 +41,8 @@ public class RestHandler {
             // TODO: Call open lock method
             try {
                 LocalDateTime time = getTimeStamp(json);
-                //hub.openLock(time,ip);
+                hub.openLock(time);
+                System.out.println("Someone unlocked the door: " + ip + " " + time);
                 return new ResponseEntity<>("You unlocked the door.", HttpStatus.OK);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -86,6 +87,16 @@ public class RestHandler {
     public ResponseEntity<?> createEmergencyService(@RequestBody String address) {
         if (validate(address)) {
             settings.setEmergencyService(address);
+            return new ResponseEntity<>(address, HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Invalid address", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @PostMapping(value = "/settings/smart_lock")
+    @ResponseBody
+    public ResponseEntity<?> createSmartLock(@RequestBody String address) {
+        if (validate(address)) {
+            settings.setLock(address);
             return new ResponseEntity<>(address, HttpStatus.OK);
         }
         return new ResponseEntity<>("Invalid address", HttpStatus.INTERNAL_SERVER_ERROR);

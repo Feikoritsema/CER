@@ -16,6 +16,9 @@ import tcp.ClientHandler;
 import tcp.LastingClientHandler;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -30,7 +33,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class Hub extends JFrame {
 
     private Status status = Status.OK;
-    private final JLabel label;
+    private JLabel label;
     private Settings settings;
     private String address;
 
@@ -48,13 +51,24 @@ public class Hub extends JFrame {
         JFrame.setDefaultLookAndFeelDecorated(true);
         setLocationRelativeTo(null);
 
+        createStatusLabel();
+        createAddressPanel();
+
+        setResizable(false);
+        pack();
+        setVisible(true);
+    }
+
+    private void createStatusLabel() {
         label = new JLabel("status");
         label.setText(status.name());
         label.setFont(new Font("Serif", Font.PLAIN, 50));
         label.setPreferredSize(new Dimension(200, 200));
         label.setHorizontalAlignment(SwingConstants.CENTER);
         add(label, BorderLayout.NORTH);
+    }
 
+    private void createAddressPanel() {
         final JPanel addresses = new JPanel(new GridLayout(1, 2));
 
         final JList<Neighbour> neighbourJList = new JList<>(settings.getNeighbours());
@@ -78,22 +92,51 @@ public class Hub extends JFrame {
             public void keyReleased(KeyEvent e) {
             }
         });
+
         addresses.add(pane);
 
-        final JLabel emergencyServices = new JLabel(settings.getEmergencyService());
-        addresses.add(emergencyServices);
+        JPanel secondaryAddresses = new JPanel();
+        GridLayout saLayout = new GridLayout(2,1);
+        secondaryAddresses.setLayout(saLayout);
 
+        Border saBorder = secondaryAddresses.getBorder();
+        Border saMargin = new EmptyBorder(10, 10, 10, 10);
+        secondaryAddresses.setBorder(new CompoundBorder(saBorder, saMargin));
+
+        final JLabel emergencyServices = new JLabel("Emergency services: " + settings.getEmergencyService());
+        secondaryAddresses.add(emergencyServices);
+
+        final JLabel smartLock = new JLabel("Smart lock: " + settings.getLock());
+        secondaryAddresses.add(smartLock);
+
+        addresses.add(secondaryAddresses, BorderLayout.LINE_END);
         add(addresses, BorderLayout.SOUTH);
 
-        final JComboBox<String> options = new JComboBox<>(new String[]{"Neighbour", "Emergency Service"});
+        final JComboBox<String> options = new JComboBox<>(new String[]{"Neighbour", "Emergency Service", "Smart Lock"});
 
         final JTextField input = new JFormattedTextField();
         input.setPreferredSize(new Dimension(600, 50));
         input.addActionListener((e) -> {
-            final String type = options.getSelectedIndex() == 1 ? "emergency_service" : "neighbour";
+            final String type;
+            switch (options.getSelectedIndex()) {
+                case 0:
+                default:
+                    type = "neighbour";
+                    break;
+                case 1:
+                    type = "emergency_service";
+                    break;
+                case 2:
+                    type = "smart_lock";
+                    break;
+            }
+
             if (addAddressToSettings(input.getText(), type)) {
                 if (Objects.equals(type, "emergency_service")) {
-                    emergencyServices.setText(input.getText());
+                    emergencyServices.setText("Emergency services: " + input.getText());
+                }
+                if (Objects.equals(type, "smart_lock")) {
+                    smartLock.setText("Smart lock: " + input.getText());
                 }
                 input.setText("");
             }
@@ -104,10 +147,6 @@ public class Hub extends JFrame {
         addressPanel.add(options);
 
         add(addressPanel, BorderLayout.CENTER);
-
-        setResizable(false);
-        pack();
-        setVisible(true);
     }
 
     public synchronized void setStatus(final Status s) {
@@ -189,5 +228,12 @@ public class Hub extends JFrame {
                     sendMessageToQueue(new EmergencyMessage(EmergencyMessage.Action.UPDATE, ip + " coming at " + time.format(DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss"))));
                     setStatus(Status.HANDLED_EMERGENCY);
                 });
+    }
+
+    public boolean openLock(LocalDateTime time) {
+        Message message = new Message();
+        new ClientHandler(settings.getLock(), 9090, message).start();
+
+        return true;
     }
 }

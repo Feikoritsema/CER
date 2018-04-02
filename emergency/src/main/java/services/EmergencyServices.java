@@ -20,13 +20,8 @@ public class EmergencyServices {
 
         System.out.println("Emergency services control started.");
 
-        String ip;
-        try {
-            ip = Server.findMachinesLocalIP().toString();
-            System.out.println("Emergency services listening on: " + ip + ":4242");
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
+        String ip = Server.findMachinesLocalIP();
+        System.out.println("Emergency services listening on: " + ip + ":4242");
 
         emergencies = new ArrayList<>();
         view = new ServicesView();

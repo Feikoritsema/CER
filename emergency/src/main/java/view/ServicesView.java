@@ -2,9 +2,11 @@ package view;
 
 import model.Emergency;
 import services.EmergencyServices;
+import tcp.Server;
 
 import javax.swing.*;
 import java.awt.*;
+import java.net.UnknownHostException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -15,6 +17,7 @@ public class ServicesView extends JFrame {
     private JScrollPane scrollable;
 
     public ServicesView() {
+        super("Emergency services @ " + Server.findMachinesLocalIP());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         buildGUI();
     }
