@@ -12,7 +12,7 @@ import java.util.List;
 @Component
 public class PriorityQueue extends Queue {
 
-    public final static String CER_HUB_PRIORITY = "CER_HUB_PRIORITY";
+    private final static String CER_HUB_PRIORITY = "CER_HUB_PRIORITY";
 
     @Autowired
     PriorityQueue(@Value("${host:localhost}") final String host, final Hub hub) {

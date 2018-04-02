@@ -8,20 +8,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.time.format.DateTimeFormatter;
 
 public class Neighbour extends JFrame {
-    private RestClient restClient;
+    private final RestClient restClient;
     private JLabel responseLabel;
-    private JLabel emergencyStatus;
-    private Server server;
-
+    private final JLabel emergencyStatus;
 
     private Neighbour(String host) {
         System.out.println("I am the Neighbour.");
         restClient = new RestClient(host);
-        server = new Server(8090);
+        Server server = new Server(8090);
         setTitle("Neighbour @ " + Server.findMachinesLocalIP());
 
         setPreferredSize(new Dimension(600, 150));

@@ -13,12 +13,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class DefaultMessageConsumer extends AbstractMessageConsumer {
+class DefaultMessageConsumer extends AbstractMessageConsumer {
 
-    public static int LOW_AVG_HEARTRATE = 20;
-    public static int NO_MOVEMENT_HOURS = 1;
-    public static int HEARTRATE_INVALID_TIME_MIN = 1;
-    public static int HEARTRATE_MINIMUM_MSG = 5;
+    private static final int LOW_AVG_HEARTRATE = 20;
+    private static final int NO_MOVEMENT_HOURS = 1;
+    private static final int HEARTRATE_INVALID_TIME_MIN = 1;
+    private static final int HEARTRATE_MINIMUM_MSG = 5;
 
     DefaultMessageConsumer(final Channel channel) {
         super(channel);

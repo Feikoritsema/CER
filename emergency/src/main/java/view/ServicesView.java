@@ -6,15 +6,12 @@ import tcp.Server;
 
 import javax.swing.*;
 import java.awt.*;
-import java.net.UnknownHostException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class ServicesView extends JFrame {
 
-    private JLabel title;
     private JTextArea emergencies;
-    private JScrollPane scrollable;
 
     public ServicesView() {
         super("Emergency services @ " + Server.findMachinesLocalIP());
@@ -27,7 +24,7 @@ public class ServicesView extends JFrame {
         JFrame.setDefaultLookAndFeelDecorated(true);
         setLocationRelativeTo(null);
 
-        title = new JLabel("Emergencies");
+        JLabel title = new JLabel("Emergencies");
         title.setFont(new Font("Serif", Font.PLAIN, 30));
         title.setPreferredSize(new Dimension(200, 100));
         add(title, BorderLayout.PAGE_START );
@@ -35,7 +32,7 @@ public class ServicesView extends JFrame {
         emergencies = new JTextArea();
         fillEmergenciesField();
 
-        scrollable = new JScrollPane(emergencies);
+        JScrollPane scrollable = new JScrollPane(emergencies);
         scrollable.setPreferredSize(new Dimension(600, 500));
         add(scrollable, BorderLayout.CENTER);
 

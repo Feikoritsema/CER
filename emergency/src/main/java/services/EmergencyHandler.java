@@ -3,18 +3,16 @@ package services;
 import message.EmergencyMessage;
 import message.Message;
 import model.Emergency;
-import status.Status;
 import tcp.ConnectionHandler;
 import view.EmergencyView;
 
 import java.net.Socket;
-import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 
 public class EmergencyHandler extends ConnectionHandler {
 
-    private Emergency emergency;
-    private EmergencyView view;
+    private final Emergency emergency;
+    private final EmergencyView view;
 
     public EmergencyHandler(Socket socket) {
         super(socket);

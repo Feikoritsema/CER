@@ -2,19 +2,18 @@ package model;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class Emergency {
 
-    private String host;
+    private final String host;
     private boolean active;
     private LocalDateTime startedAt;
-    private ArrayList<String> log;
+    private final ArrayList<String> log;
 
-    private PropertyChangeSupport changes;
+    private final PropertyChangeSupport changes;
 
     public Emergency() {
         this(null);
@@ -41,10 +40,6 @@ public class Emergency {
 
     public String getHost() {
         return host;
-    }
-
-    public void setHost(String host) {
-        this.host = host;
     }
 
     public boolean isActive() {

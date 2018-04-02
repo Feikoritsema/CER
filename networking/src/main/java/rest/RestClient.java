@@ -9,10 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 public class RestClient {
-    private String ip;
-    private int port = 8080;
-    private String base = "/api";
-    private JsonMessageFactory jsonMessageFactory;
+    private final String ip;
+    private final JsonMessageFactory jsonMessageFactory;
 
     public RestClient(String host) {
         jsonMessageFactory = new JsonMessageFactory();
@@ -26,6 +24,8 @@ public class RestClient {
             String json = jsonMessageFactory.messageToJson(message);
             RestTemplate restTemplate = new RestTemplate();
             HttpEntity<String> request = new HttpEntity<>(json);
+            String base = "/api";
+            int port = 8080;
             String url = "http://" + ip + ":" + port + base + path;
             response = restTemplate.exchange(url, HttpMethod.POST, request, String.class);
         } catch (Exception e) {

@@ -14,13 +14,11 @@ import java.beans.PropertyChangeListener;
 
 public class EmergencyView extends JFrame implements PropertyChangeListener {
 
-    private JLabel label;
-    JLabel status;
-    JTextArea log;
-    JScrollPane scrollable;
+    private JLabel status;
+    private JTextArea log;
 
-    Emergency emergency;
-    EmergencyHandler handler;
+    private final Emergency emergency;
+    private final EmergencyHandler handler;
 
     public EmergencyView(EmergencyHandler handler) {
         super("Emergency @ " + handler.getEmergency().getHost());
@@ -50,11 +48,11 @@ public class EmergencyView extends JFrame implements PropertyChangeListener {
             log.append(message + "\n");
         }
 
-        scrollable = new JScrollPane(log);
+        final JScrollPane scrollable = new JScrollPane(log);
         scrollable.setPreferredSize(new Dimension(600, 700));
         add(scrollable, BorderLayout.CENTER);
 
-        JPanel buttonPanel = createButtonPanel();
+        final JPanel buttonPanel = createButtonPanel();
         add(buttonPanel, BorderLayout.PAGE_END);
 
         pack();
@@ -85,10 +83,12 @@ public class EmergencyView extends JFrame implements PropertyChangeListener {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         addWindowListener(new WindowListener() {
             @Override
-            public void windowOpened(WindowEvent e) { }
+            public void windowOpened(WindowEvent e) {
+            }
 
             @Override
-            public void windowClosing(WindowEvent e) { }
+            public void windowClosing(WindowEvent e) {
+            }
 
             @Override
             public void windowClosed(WindowEvent e) {
@@ -96,16 +96,20 @@ public class EmergencyView extends JFrame implements PropertyChangeListener {
             }
 
             @Override
-            public void windowIconified(WindowEvent e) { }
+            public void windowIconified(WindowEvent e) {
+            }
 
             @Override
-            public void windowDeiconified(WindowEvent e) { }
+            public void windowDeiconified(WindowEvent e) {
+            }
 
             @Override
-            public void windowActivated(WindowEvent e) { }
+            public void windowActivated(WindowEvent e) {
+            }
 
             @Override
-            public void windowDeactivated(WindowEvent e) { }
+            public void windowDeactivated(WindowEvent e) {
+            }
         });
     }
 
@@ -117,7 +121,7 @@ public class EmergencyView extends JFrame implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent event) {
         switch (event.getPropertyName()) {
             case "log":
-                log.append((String) event.getNewValue() + "\n");
+                log.append(event.getNewValue() + "\n");
                 break;
             case "status":
                 if ((boolean) event.getNewValue()) { // when emergency is active

@@ -11,7 +11,7 @@ public class BedSensor extends Sensor {
 	private BedSensorStatus status;
 	private JLabel label;
 
-	BedSensor(final String host) {
+	private BedSensor(final String host) {
 		super("Bed Sensor", host);
 	}
 
@@ -43,7 +43,7 @@ public class BedSensor extends Sensor {
 		setVisible(true);
 	}
 
-	void sendMessage() {
+	private void sendMessage() {
 		BedMessage message = new BedMessage();
 		message.setStatus(status);
 		producer.sendDefaultMessage(message);
@@ -72,7 +72,7 @@ public class BedSensor extends Sensor {
 		new Thread(new BedSensor(host)).run();
 	}
 
-	public void setStatus(final BedSensorStatus status) {
+	private void setStatus(final BedSensorStatus status) {
 		this.status = status;
 		label.setText(status.name());
 	}

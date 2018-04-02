@@ -11,10 +11,10 @@ import java.net.URL;
 
 public class StatusView extends JFrame implements PropertyChangeListener {
 
-    private Lock lock;
+    private final Lock lock;
 
-    private URL lockedImage;
-    private URL unlockedImage;
+    private final URL lockedImage;
+    private final URL unlockedImage;
 
     private JLabel label;
 
