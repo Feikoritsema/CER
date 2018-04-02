@@ -42,7 +42,7 @@ public class Server {
      * @return the local IP address this machines listens to.
      * @throws UnknownHostException if no matching ip is found.
      */
-    public static InetAddress findMachinesLocalIP() throws UnknownHostException {
+    public static String findMachinesLocalIP() {
         try {
             Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
 
@@ -52,7 +52,7 @@ public class Server {
                     InetAddress address = inetAddresses.nextElement();
                     String ip = address.getHostAddress();
                     if (ip.indexOf("192.") == 0 || ip.indexOf("145.") == 0 || ip.indexOf("129.") == 0) {
-                        return address;
+                        return address.toString();
                     }
                 }
             }
@@ -60,6 +60,6 @@ public class Server {
             e.printStackTrace();
         }
 
-        throw new UnknownHostException();
+        return null;
     }
 }

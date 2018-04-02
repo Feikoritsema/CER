@@ -22,13 +22,7 @@ public class Neighbour extends JFrame {
         System.out.println("I am the Neighbour.");
         restClient = new RestClient(host);
         server = new Server(8090);
-        try {
-            setTitle("Neighbour @ " + Server.findMachinesLocalIP().getHostAddress());
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-            setTitle("Neighbour @ Unresolvable_host");
-
-        }
+        setTitle("Neighbour @ " + Server.findMachinesLocalIP());
 
         setPreferredSize(new Dimension(600, 150));
         setVisible(true);

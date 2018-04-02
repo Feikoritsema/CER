@@ -92,6 +92,16 @@ public class RestHandler {
         return new ResponseEntity<>("Invalid address", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @PostMapping(value = "/settings/smart_lock")
+    @ResponseBody
+    public ResponseEntity<?> createSmartLock(@RequestBody String address) {
+        if (validate(address)) {
+            settings.setLock(address);
+            return new ResponseEntity<>(address, HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Invalid address", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     private LocalDateTime getTimeStamp(String json) throws IOException {
         return jsonMessageFactory.jsonToMessage(json).getTime();
     }

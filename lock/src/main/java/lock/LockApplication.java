@@ -25,13 +25,8 @@ public class LockApplication {
 
         System.out.println("Smart lock control started.");
 
-        String ip;
-        try {
-            ip = Server.findMachinesLocalIP().toString();
-            System.out.println("Smart lock listening on: " + ip + ":9090");
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
+        String ip = Server.findMachinesLocalIP();
+        System.out.println("Smart lock listening on: " + ip + ":9090");
 
         while (true) {
             try {
