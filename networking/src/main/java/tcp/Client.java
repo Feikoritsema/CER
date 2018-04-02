@@ -20,32 +20,45 @@ public class Client {
         jsonMessageFactory = new JsonMessageFactory();
     }
 
-    public void connectTo(String host, int port) {
+    public boolean connectTo(String host, int port) {
         try {
             socket = new Socket(host, port);
             outputStream = new DataOutputStream(socket.getOutputStream());
+            return true;
         } catch (IOException e) {
             System.err.println("Can't connect to host: " + host + " on port: " + port);
             e.printStackTrace();
         }
+
+        return false;
     }
 
-    public void send(Message message) {
+    public boolean send(Message message) {
+        if (socket == null || !socket.isConnected()) {
+            System.err.println("Can't send message because there is no connection with the host");
+            return false;
+        }
+
         PrintWriter pw = new PrintWriter(outputStream);
         try {
             String json = jsonMessageFactory.messageToJson(message);
             pw.write(json + "\n");
             pw.flush();
+            return true;
         } catch (JsonProcessingException e) {
             System.err.println("Can't convert message to JSON");
             e.printStackTrace();
         }
+
+        return false;
     }
 
     public void close() {
         try {
-            socket.close();
-            System.out.println("Connection with " + socket.getInetAddress().getHostAddress() + " closed");
+            if (socket != null) {
+                socket.close();
+                System.out.println("Connection with " + socket.getInetAddress().getHostAddress() + " closed");
+            }
         } catch (IOException e) {
             System.err.println("Can't close socket");
             e.printStackTrace();
