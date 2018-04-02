@@ -1,6 +1,7 @@
 import rest.RestClient;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.regex.Pattern;
 
 public class Neighbour extends JFrame {
@@ -11,11 +12,11 @@ public class Neighbour extends JFrame {
         System.out.println("I am the Neighbour.");
         restClient = new RestClient(host);
 
+        setPreferredSize(new Dimension(500,100));
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JPanel panel = new JPanel();
-        add(panel);
 
         JButton openLock = new JButton("Open neighbour lock");
         panel.add(openLock);
@@ -27,8 +28,9 @@ public class Neighbour extends JFrame {
         sendOnWay.addActionListener (e -> responseLabel.setText(restClient.
                 sendStringPostRequest("/emergency/neighbour_coming").getBody()));
 
-        responseLabel = new JLabel("");
+        responseLabel = new JLabel(" ");
         panel.add(responseLabel);
+        add(panel);
         pack();
     }
 
