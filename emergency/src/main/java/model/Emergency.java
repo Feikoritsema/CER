@@ -2,12 +2,14 @@ package model;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Emergency {
 
     private String host;
     private boolean active;
+    private LocalDateTime startedAt;
     private ArrayList<String> log;
 
     private PropertyChangeSupport changes;
@@ -51,5 +53,13 @@ public class Emergency {
         boolean old = this.active;
         this.active = active;
         changes.firePropertyChange("status", old, active);
+    }
+
+    public LocalDateTime getStartedAt() {
+        return startedAt;
+    }
+
+    public void setStartedAt(LocalDateTime startedAt) {
+        this.startedAt = startedAt;
     }
 }

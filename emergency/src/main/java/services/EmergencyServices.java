@@ -1,20 +1,19 @@
 package services;
 
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestTemplate;
+import model.Emergency;
 import tcp.Server;
+import view.ServicesView;
 
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 
 public class EmergencyServices {
-    private static final String URL = "http://localhost:8080/api";
-
     private static Server server;
+
+    private static ServicesView view;
+    private static ArrayList<Emergency> emergencies;
 
     public static void main(String args[]) {
         server = new Server(4242);
@@ -29,6 +28,9 @@ public class EmergencyServices {
             e.printStackTrace();
         }
 
+        emergencies = new ArrayList<>();
+        view = new ServicesView();
+
         while (true) {
             try {
                 Socket clientSocket = server.waitForConnection();
@@ -40,14 +42,16 @@ public class EmergencyServices {
         }
     }
 
-    private static void sendStringPostRequest(String path, String message){
-        RestTemplate restTemplate = new RestTemplate();
-        HttpEntity<String> request = new HttpEntity<>(message);
-        ResponseEntity<String> response = restTemplate.exchange(URL + path,
-                HttpMethod.POST, request, String.class);
-        String string = response.getBody();
-        HttpStatus httpStatus = response.getStatusCode();
-        assert(httpStatus.equals(HttpStatus.OK));
-        System.out.println(string);
+    public static void addEmergency(Emergency emergency) {
+        emergencies.add(emergency);
+        view.update();
+    }
+
+    public static void update() {
+        view.update();
+    }
+
+    public static ArrayList<Emergency> getEmergencies() {
+        return emergencies;
     }
 }

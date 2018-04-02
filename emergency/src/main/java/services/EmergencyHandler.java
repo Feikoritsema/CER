@@ -8,6 +8,8 @@ import tcp.ConnectionHandler;
 import view.EmergencyView;
 
 import java.net.Socket;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 
 public class EmergencyHandler extends ConnectionHandler {
 
@@ -26,16 +28,20 @@ public class EmergencyHandler extends ConnectionHandler {
 
         switch (emergencyMessage.getAction()) {
             case OPEN:
-                emergency.addEvent(emergencyMessage.getTime() + ": " + emergencyMessage.getBody());
+                emergency.addEvent(parseMessage(emergencyMessage));
                 emergency.setActive(true);
+                emergency.setStartedAt(emergencyMessage.getTime());
+                EmergencyServices.addEmergency(emergency);
                 view.display();
                 break;
             case UPDATE:
-                emergency.addEvent(emergencyMessage.getTime() + ": " + emergencyMessage.getBody());
+                emergency.addEvent(parseMessage(emergencyMessage));
                 break;
             case CLOSE:
                 close();
+                emergency.addEvent(parseMessage(emergencyMessage));
                 emergency.setActive(false);
+                EmergencyServices.update();
                 return;
             default:
                 System.out.println("Unrecognized action.");
@@ -43,11 +49,20 @@ public class EmergencyHandler extends ConnectionHandler {
 
     }
 
+    private String parseMessage(EmergencyMessage message) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        String time = formatter.format(message.getTime());
+        return time + ": " + message.getBody();
+    }
+
     public Emergency getEmergency() {
         return emergency;
     }
 
-    public void setEmergency(Emergency emergency) {
-        this.emergency = emergency;
+    @Override
+    public void close() {
+        super.close();
+        emergency.setActive(false);
+        EmergencyServices.update();
     }
 }
