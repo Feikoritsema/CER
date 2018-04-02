@@ -1,3 +1,5 @@
+import rest.RestClient;
+
 import javax.swing.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -9,7 +11,7 @@ public class Neighbour {
 
     private Neighbour(){
         System.out.println("I am the Neighbour.");
-
+        restClient = new RestClient();
         // UI part
         JFrame frame = new JFrame("Neighbour");
         frame.setVisible(true);
@@ -22,12 +24,12 @@ public class Neighbour {
         JButton openLock = new JButton("Open neighbour lock");
         panel.add(openLock);
         openLock.addActionListener (e -> responseLabel.setText(restClient
-                .sendStringPostRequest("/lock", "Feiko")));
+                .sendStringPostRequest("/lock/")));
 
         JButton sendOnWay = new JButton("Notify you're coming");
         panel.add(sendOnWay);
         sendOnWay.addActionListener (e -> responseLabel.setText(restClient.
-                sendStringPostRequest("/emergency/neighbourComing", getDateTime())));
+                sendStringPostRequest("/emergency/neighbourComing")));
 
         JButton testMe = new JButton("TestMe");
         panel.add(testMe);

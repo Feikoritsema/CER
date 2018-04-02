@@ -20,10 +20,5 @@
 			<groupId>CER</groupId>
 			<artifactId>CER-networking</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>CER</groupId>
-			<artifactId>CER-messages</artifactId>
-			<version>1.0-SNAPSHOT</version>
-		</dependency>
 	</dependencies>
 </project>

@@ -1,4 +1,5 @@
 import message.Message;
+import rest.RestClient;
 
 import javax.swing.*;
 import java.net.UnknownHostException;
@@ -6,11 +7,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class EmergencyServices {
-    private static Server server;
+    private Server server;
     private RestClient restClient;
     private JLabel responseLabel;
 
     private EmergencyServices(){
+        restClient = new RestClient();
+
         // UI part
         JFrame frame = new JFrame("EmergencyServices");
         frame.setVisible(true);
@@ -23,12 +26,12 @@ public class EmergencyServices {
         JButton openLock = new JButton("Open the lock");
         panel.add(openLock);
         openLock.addActionListener (e -> responseLabel.setText(restClient
-                .sendStringPostRequest("/lock", "EmergencyServices")));
+                .sendStringPostRequest("/lock")));
 
         JButton sendOnWay = new JButton("Notify the ambulance is on its way.");
         panel.add(sendOnWay);
         sendOnWay.addActionListener (e -> responseLabel.setText(restClient.
-                sendStringPostRequest("/emergency/emservicesComing", getDateTime())));
+                sendStringPostRequest("/emergency/emservicesComing")));
 
         JButton testMe = new JButton("TestMe");
         panel.add(testMe);
