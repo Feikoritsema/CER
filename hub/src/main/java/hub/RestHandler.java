@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import status.Status;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -44,36 +43,40 @@ public class RestHandler {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
                 .getRequest();
         String ip = request.getRemoteAddr();
-        if (hub.validateNeighbour(ip)) {
+        if (hub.validateRequestIp(ip)) {
             // TODO: Call open lock method
             try {
                 LocalDateTime time = getTimeStamp(json);
                 //hub.openLock(time,ip);
-                return new ResponseEntity<>("Neighbour unlocked the door.", HttpStatus.OK);
+                System.out.println("Someone unlocked the door: " + ip + " " + time);
+                return new ResponseEntity<>("You unlocked the door.", HttpStatus.OK);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
         // Bad verification
+        System.out.println("Someone tried to unlock the door: " + ip);
         return new ResponseEntity<>("NOT authorized.", HttpStatus.UNAUTHORIZED);
     }
 
-    @RequestMapping(value = "/emergency/neighbour_coming", method = RequestMethod.GET)
+    @RequestMapping(value = "/emergency/neighbour_coming", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<String> neighbourComing(@RequestBody String json) {
         // Verify user who sent request
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
                 .getRequest();
         String ip = request.getRemoteAddr();
-        if (hub.validateNeighbour(ip)) {
+        if (hub.validateRequestIp(ip)) {
             try {
                 LocalDateTime time = getTimeStamp(json);
                 // hub.sendNeighbourComing(time,ip);
-                return new ResponseEntity<>("Updated", HttpStatus.OK);
+                System.out.println("Neighbour coming : " + ip + " " + time);
+                return new ResponseEntity<>("Updated: " + time, HttpStatus.OK);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+        System.out.println("Unauthorized neighbour coming: " + ip);
         return new ResponseEntity<>("Unauthorized request ", HttpStatus.UNAUTHORIZED);
     }
 
@@ -86,17 +89,6 @@ public class RestHandler {
             return new ResponseEntity<>("Settings updated", HttpStatus.OK);
         }
         return new ResponseEntity<>("Something went wrong", HttpStatus.BAD_REQUEST);
-    }
-
-
-    // Testing endpoint
-    @RequestMapping(method = RequestMethod.GET)
-    @ResponseBody
-    public ResponseEntity<String> testMethod() {
-        System.out.println("Test GET method called");
-        String test = "Rest GET request for CER worked";
-        hub.setStatus(Status.HANDLED_EMERGENCY);
-        return new ResponseEntity<>(test, HttpStatus.OK);
     }
 
     @PostMapping(value = "/settings/neighbour")

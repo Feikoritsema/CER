@@ -19,6 +19,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Objects;
+import java.util.Optional;
 
 @Component
 public class Hub extends JFrame {
@@ -76,7 +77,6 @@ public class Hub extends JFrame {
         addresses.add(emergencyServices);
 
         add(addresses, BorderLayout.SOUTH);
-
 
         final JComboBox<String> options = new JComboBox<>(new String[]{"Neighbour", "Emergency Service"});
 
@@ -162,7 +162,8 @@ public class Hub extends JFrame {
         return true;
     }
 
-    public Boolean validateNeighbour(String address){
-        return true;
+    public boolean validateRequestIp(String address) {
+        return Optional.ofNullable(address).isPresent() &&
+                (settings.getNeighboursAsList().stream().anyMatch(i -> i.getAddress().equals(address)) || address.equals(settings.getEmergencyService()) | ("127.0.0.1").equals(address));
     }
 }
