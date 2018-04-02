@@ -44,16 +44,18 @@ public class RestHandler {
             try {
                 LocalDateTime time = getTimeStamp(json);
                 //hub.openLock(time,ip);
-                return new ResponseEntity<>("Neighbour unlocked the door.", HttpStatus.OK);
+                System.out.println("Someone unlocked the door: " + ip + " " + time);
+                return new ResponseEntity<>("You unlocked the door.", HttpStatus.OK);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
         // Bad verification
+        System.out.println("Someone tried to unlock the door: " + ip);
         return new ResponseEntity<>("NOT authorized.", HttpStatus.UNAUTHORIZED);
     }
 
-    @RequestMapping(value = "/emergency/neighbour_coming", method = RequestMethod.GET)
+    @RequestMapping(value = "/emergency/neighbour_coming", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<String> neighbourComing(@RequestBody String json) {
         // Verify user who sent request
@@ -64,11 +66,13 @@ public class RestHandler {
             try {
                 LocalDateTime time = getTimeStamp(json);
                 // hub.sendNeighbourComing(time,ip);
-                return new ResponseEntity<>("Updated", HttpStatus.OK);
+                System.out.println("Neighbour coming : " + ip + " " + time);
+                return new ResponseEntity<>("Updated: " + time, HttpStatus.OK);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+        System.out.println("Unauthorized neighbour coming: " + ip);
         return new ResponseEntity<>("Unauthorized request ", HttpStatus.UNAUTHORIZED);
     }
 

@@ -8,6 +8,10 @@ public class Neighbour {
         this.address = address;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
     public void setComing(boolean coming) {
         this.coming = coming;
     }

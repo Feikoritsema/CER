@@ -17,7 +17,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.IntStream;
 
 @Component
 public class Hub extends JFrame {
@@ -149,7 +151,9 @@ public class Hub extends JFrame {
         return true;
     }
 
-    public Boolean validateNeighbour(String address){
-        return true;
+    public boolean validateNeighbour(String address){
+        List<Neighbour> neighbours = settings.getNeighboursAsList();
+        return IntStream.range(0, neighbours.size()).anyMatch(i -> neighbours.get(i).getAddress().equals(address))
+                || address.equals(settings.getEmergencyService()) || address.equals("127.0.0.1");
     }
 }

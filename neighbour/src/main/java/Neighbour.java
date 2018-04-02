@@ -22,12 +22,12 @@ public class Neighbour {
         JButton openLock = new JButton("Open neighbour lock");
         panel.add(openLock);
         openLock.addActionListener (e -> responseLabel.setText(restClient
-                .sendStringPostRequest("/lock/")));
+                .sendStringPostRequest("/lock").getBody()));
 
         JButton sendOnWay = new JButton("Notify you're coming");
         panel.add(sendOnWay);
         sendOnWay.addActionListener (e -> responseLabel.setText(restClient.
-                sendStringPostRequest("/emergency/neighbour_coming")));
+                sendStringPostRequest("/emergency/neighbour_coming").getBody()));
 
         JButton testMe = new JButton("TestMe");
         panel.add(testMe);
