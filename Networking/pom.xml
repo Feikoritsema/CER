@@ -2,7 +2,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
     <parent>
         <artifactId>CER</artifactId>
         <groupId>CER</groupId>
@@ -10,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>CER-emergency</artifactId>
+    <artifactId>CER-networking</artifactId>
 
     <dependencies>
         <dependency>
@@ -19,25 +18,8 @@
         </dependency>
         <dependency>
             <groupId>CER</groupId>
-            <artifactId>CER-networking</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>CER</groupId>
             <artifactId>CER-messages</artifactId>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.2.1</version>
-                <configuration>
-                    <mainClass>services.EmergencyServices</mainClass>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>
