@@ -87,17 +87,6 @@ public class RestHandler {
         return new ResponseEntity<>("Something went wrong", HttpStatus.BAD_REQUEST);
     }
 
-
-    // Testing endpoint
-    @RequestMapping(method = RequestMethod.GET)
-    @ResponseBody
-    public ResponseEntity<String> testMethod() {
-        System.out.println("Test GET method called");
-        String test = "Rest GET request for CER worked";
-        hub.setStatus(Status.HANDLED_EMERGENCY);
-        return new ResponseEntity<>(test, HttpStatus.OK);
-    }
-
     @PostMapping(value = "/settings/neighbour")
     @ResponseBody
     public ResponseEntity<?> createNeighbour(@RequestBody String address) {

@@ -20,13 +20,6 @@ public class RestClient {
         ip = host;
     }
 
-    public String sendGetRequest(String path){
-        RestTemplate restTemplate = new RestTemplate();
-        String url = "http://" + ip + ":" + port + base + path;
-        ResponseEntity<String> response = restTemplate.getForEntity(url + path, String.class);
-        return response.getBody();
-    }
-
     public ResponseEntity<String> sendStringPostRequest(String path) {
         Message message = new Message();
         ResponseEntity<String> response = null;

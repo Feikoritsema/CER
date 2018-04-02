@@ -3,21 +3,19 @@ import rest.RestClient;
 import javax.swing.*;
 import java.util.regex.Pattern;
 
-public class Neighbour {
+public class Neighbour extends JFrame {
     private RestClient restClient;
     private JLabel responseLabel;
 
-    private Neighbour(String host){
+    private Neighbour(String host) {
         System.out.println("I am the Neighbour.");
         restClient = new RestClient(host);
-        // UI part
-        JFrame frame = new JFrame("Neighbour");
-        frame.setVisible(true);
-        frame.setSize(500,100);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        setVisible(true);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JPanel panel = new JPanel();
-        frame.add(panel);
+        add(panel);
 
         JButton openLock = new JButton("Open neighbour lock");
         panel.add(openLock);
@@ -29,12 +27,9 @@ public class Neighbour {
         sendOnWay.addActionListener (e -> responseLabel.setText(restClient.
                 sendStringPostRequest("/emergency/neighbour_coming").getBody()));
 
-        JButton testMe = new JButton("TestMe");
-        panel.add(testMe);
-        testMe.addActionListener (e -> responseLabel.setText(restClient.sendGetRequest("/")));
-
         responseLabel = new JLabel("");
         panel.add(responseLabel);
+        pack();
     }
 
     public static void main(String args[]){
