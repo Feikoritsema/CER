@@ -90,7 +90,7 @@ public class EmergencyView extends JFrame implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent event) {
         switch (event.getPropertyName()) {
             case "log":
-                log.append((String) event.getNewValue());
+                log.append((String) event.getNewValue() + "\n");
                 break;
             case "status":
                 if ((boolean) event.getNewValue()) { // when emergency is active
