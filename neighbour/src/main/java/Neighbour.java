@@ -2,7 +2,8 @@ import rest.RestClient;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.regex.Pattern;
+
+import static tcp.IpUtils.validate;
 
 public class Neighbour extends JFrame {
     private RestClient restClient;
@@ -11,7 +12,7 @@ public class Neighbour extends JFrame {
     private Neighbour(String host) {
         System.out.println("I am the Neighbour.");
         restClient = new RestClient(host);
-
+        
         setPreferredSize(new Dimension(500,100));
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -34,8 +35,8 @@ public class Neighbour extends JFrame {
         pack();
     }
 
-    public static void main(String args[]){
-        if (args.length > 0 && validate(args[0])){
+    public static void main(String args[]) {
+        if (args.length > 0 && validate(args[0])) {
             new Neighbour(args[0]);
             System.out.println("Using address " + args[0]);
         } else {
@@ -43,12 +44,4 @@ public class Neighbour extends JFrame {
             System.out.println("Invalid address, assuming localhost");
         }
     }
-
-    private static final Pattern PATTERN = Pattern.compile(
-            "^(([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.){3}([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
-
-    public static boolean validate(final String ip) {
-        return PATTERN.matcher(ip).matches();
-    }
-
 }

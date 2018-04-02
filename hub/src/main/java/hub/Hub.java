@@ -3,6 +3,7 @@ package hub;
 import hub.settings.Neighbour;
 import hub.settings.Settings;
 import message.EmergencyMessage;
+import message.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -105,13 +106,9 @@ public class Hub extends JFrame {
     }
 
     public synchronized void setStatus(final Status s) {
-        // TODO: Implement sending message when neightbour reacts
+        // TODO: Implement sending message when neighbour reacts
         if (status == Status.OK && s == Status.UNHANDLED_EMERGENCY) {
-            System.out.println("Sending message now!");
-            emergencyConnection = new Client();
-            emergencyConnection.connectTo("localhost", 4242);
-            EmergencyMessage message = new EmergencyMessage(EmergencyMessage.Action.OPEN, "New Emergency procedure started.");
-            emergencyConnection.send(message);
+            initializeEmergencySequence();
         }
 
         if (status == Status.UNHANDLED_EMERGENCY) {
@@ -129,6 +126,22 @@ public class Hub extends JFrame {
         }
 
         label.setText(status.name());
+    }
+
+    private void initializeEmergencySequence() {
+        System.out.println("Sending message now!");
+        emergencyConnection = new Client();
+        emergencyConnection.connectTo(settings.getEmergencyService(), 4242);
+        EmergencyMessage message = new EmergencyMessage(EmergencyMessage.Action.OPEN, "New Emergency procedure started.");
+        emergencyConnection.send(message);
+        settings.getNeighboursAsList().forEach(this::alertNeighbour);
+    }
+
+    private void alertNeighbour(Neighbour neighbour) {
+        final Client client = new Client();
+        client.connectTo(neighbour.getAddress(), 8090);
+        client.send(new Message());
+        client.close();
     }
 
     public Status getStatus() {
