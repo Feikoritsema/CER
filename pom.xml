@@ -30,7 +30,8 @@
 		<module>neighbour</module>
 		<module>messages</module>
 		<module>Networking</module>
-	</modules>
+        <module>lock</module>
+    </modules>
 
 	<dependencies>
 		<dependency>
