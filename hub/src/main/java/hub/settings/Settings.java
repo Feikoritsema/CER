@@ -1,8 +1,10 @@
 package hub.settings;
 
+import org.apache.commons.collections4.IteratorUtils;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
+import java.util.List;
 
 @Component
 public class Settings {
@@ -27,5 +29,9 @@ public class Settings {
 
     public void addNeighbour(Neighbour neighbour) {
         neighbours.addElement(neighbour);
+    }
+
+    public List<Neighbour> getNeighboursAsList() {
+        return IteratorUtils.toList(neighbours.elements().asIterator());
     }
 }
