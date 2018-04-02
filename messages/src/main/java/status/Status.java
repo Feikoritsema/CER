@@ -1,7 +1,7 @@
 package status;
 
 public enum Status {
-	HANDLED_EMERGENCY,
-	UNHANDLED_EMERGENCY,
-	OK
+    HANDLED_EMERGENCY,
+    UNHANDLED_EMERGENCY,
+    OK
 }

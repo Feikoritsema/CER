@@ -4,18 +4,18 @@ import status.Status;
 
 public class PanicMessage extends Message {
 
-	private Status status;
+    private Status status;
 
-	PanicMessage() {
-		super();
-	}
+    PanicMessage() {
+        super();
+    }
 
-	public PanicMessage(final Status s) {
-		super();
-		status = s;
-	}
+    public PanicMessage(final Status s) {
+        super();
+        status = s;
+    }
 
-	public Status getStatus() {
-		return status;
-	}
+    public Status getStatus() {
+        return status;
+    }
 }

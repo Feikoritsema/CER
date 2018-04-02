@@ -16,7 +16,7 @@
             <artifactId>CER-messages</artifactId>
         </dependency>
         <dependency>
-        <groupId>org.springframework</groupId>
+            <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
             <version>${springframework.version}</version>
         </dependency>
@@ -43,7 +43,7 @@
                         <configuration>
                             <classifier>spring-boot</classifier>
                             <mainClass>
-                                hub.HubApplication
+                                hub.Hub
                             </mainClass>
                         </configuration>
                     </execution>
