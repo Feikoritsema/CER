@@ -8,7 +8,7 @@ import java.net.Socket;
 
 public class LockHandler extends ConnectionHandler {
 
-    private Lock lock;
+    private final Lock lock;
 
     public LockHandler(Socket socket, Lock lock) {
         super(socket);

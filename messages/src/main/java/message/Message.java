@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 
 public class Message implements Serializable {
 
-    private LocalDateTime time;
+    private final LocalDateTime time;
 
     public Message() {
         time = LocalDateTime.now();
@@ -30,7 +30,4 @@ public class Message implements Serializable {
         return time;
     }
 
-    public void setTime(final LocalDateTime time) {
-        this.time = time;
-    }
 }

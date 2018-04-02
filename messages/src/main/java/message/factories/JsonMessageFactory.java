@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public class JsonMessageFactory {
 
-    private ObjectMapper mapper;
+    private final ObjectMapper mapper;
 
     public JsonMessageFactory() {
         mapper = new ObjectMapper();

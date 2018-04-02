@@ -9,7 +9,7 @@ import java.awt.*;
 
 public class PanicButton extends Sensor {
 
-	public PanicButton(final String host) {
+	private PanicButton(final String host) {
 		super("Panic Button", host);
 	}
 
@@ -32,7 +32,7 @@ public class PanicButton extends Sensor {
 		setVisible(true);
 	}
 
-	void sendMessage(final Message msg) {
+	private void sendMessage(final Message msg) {
 		producer.sendPriorityMessage(msg);
 	}
 

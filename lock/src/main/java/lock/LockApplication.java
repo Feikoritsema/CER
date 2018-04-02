@@ -6,22 +6,16 @@ import view.StatusView;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 public class LockApplication {
 
-    public static final int PORT = 9090;
-
-    private static Server server;
-
-    private static Lock lock;
-    private static StatusView view;
+    private static final int PORT = 9090;
 
     public static void main(String args[]) throws Exception {
-        lock = new Lock();
-        view = new StatusView(lock);
+        Lock lock = new Lock();
+        new StatusView(lock);
 
-        server = new Server(PORT);
+        Server server = new Server(PORT);
 
         System.out.println("Smart lock control started.");
 

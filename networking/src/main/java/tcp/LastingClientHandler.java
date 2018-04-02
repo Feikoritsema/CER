@@ -9,9 +9,8 @@ import java.util.concurrent.TimeUnit;
 public class LastingClientHandler extends Thread {
     private final String host;
     private final int port;
-    private BlockingQueue<Message> queue;
+    private final BlockingQueue<Message> queue;
     private Client client;
-    private static int MAX_RETRIES = 3;
     private boolean isConnected;
 
     public LastingClientHandler(final String host, int port, final BlockingQueue<Message> queue) {
@@ -23,6 +22,7 @@ public class LastingClientHandler extends Thread {
     @Override
     public void run() {
         client = new Client();
+        int MAX_RETRIES = 3;
         int i = MAX_RETRIES;
         isConnected = false;
         while (i > 0 && !(isConnected = client.connectTo(host, port))) {
@@ -41,7 +41,7 @@ public class LastingClientHandler extends Thread {
         client.close();
     }
 
-    public void close() {
+    private void close() {
         isConnected = false;
     }
 

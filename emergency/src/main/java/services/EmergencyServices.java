@@ -6,17 +6,15 @@ import view.ServicesView;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 public class EmergencyServices {
-    private static Server server;
 
     private static ServicesView view;
     private static ArrayList<Emergency> emergencies;
 
     public static void main(String args[]) {
-        server = new Server(4242);
+        Server server = new Server(4242);
 
         System.out.println("Emergency services control started.");
 

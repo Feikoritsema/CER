@@ -6,13 +6,13 @@ import java.beans.PropertyChangeSupport;
 public class Lock {
 
     private boolean locked;
-    private PropertyChangeSupport changes;
+    private final PropertyChangeSupport changes;
 
     public Lock() {
         this(true);
     }
 
-    public Lock(boolean locked) {
+    private Lock(boolean locked) {
         this.locked = locked;
         changes = new PropertyChangeSupport(this);
     }

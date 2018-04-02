@@ -8,8 +8,8 @@ public class EmergencyMessage extends Message {
         CLOSE
     }
 
-    private Action action;
-    private String body;
+    private final Action action;
+    private final String body;
 
     public EmergencyMessage() {
         this(null);
@@ -29,15 +29,8 @@ public class EmergencyMessage extends Message {
         return action;
     }
 
-    public void setAction(Action action) {
-        this.action = action;
-    }
-
     public String getBody() {
         return body;
     }
 
-    public void setBody(String body) {
-        this.body = body;
-    }
 }

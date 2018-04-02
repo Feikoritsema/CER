@@ -3,11 +3,9 @@ package tcp;
 import message.Message;
 
 public class ClientHandler extends Thread {
-    private static int MAX_RETRIES = 3;
     private final Message message;
-    private Client client;
-    private int port;
-    private String host;
+    private final int port;
+    private final String host;
 
     public ClientHandler(final String host, int port, final Message message) {
         this.host = host;
@@ -17,7 +15,8 @@ public class ClientHandler extends Thread {
 
     @Override
     public void run() {
-        client = new Client();
+        Client client = new Client();
+        int MAX_RETRIES = 3;
         int i = MAX_RETRIES;
         boolean isConnected = false;
         while (i > 0 && !(isConnected = client.connectTo(host, port))) {
