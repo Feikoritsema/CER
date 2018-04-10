@@ -59,7 +59,7 @@ class DefaultMessageConsumer extends AbstractMessageConsumer {
     private BedSensorStatus getBedStatus() {
         List<BedMessage> bedMessages = getLastNMessages(BedMessage.class, MAX_ELEMENTS);
         if (!CollectionUtils.isEmpty(bedMessages))
-            return bedMessages.get(0).getStatus();
+            return bedMessages.get(bedMessages.size() - 1).getStatus();
         return BedSensorStatus.NOT_ASLEEP;
     }
 
